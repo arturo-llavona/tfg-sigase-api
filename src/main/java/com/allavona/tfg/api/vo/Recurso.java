@@ -1,28 +1,18 @@
-package com.allavona.tfg.business.bbdd.entity;
+package com.allavona.tfg.api.vo;
 
-import jakarta.persistence.*;
+import com.allavona.tfg.business.bbdd.entity.TipoRecursoEntity;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
-import java.util.Objects;
+import java.io.Serializable;
 
-@Entity
-@Table(name = "recurso", schema = "public", catalog = "tfg")
-public class RecursoEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "id_recurso")
+public class Recurso implements Serializable {
     private int idRecurso;
-
-    @ManyToOne()
-    @JoinColumn(name = "id_tipo_recurso")
-    private TipoRecursoEntity tipoRecurso;
-    @Basic
-    @Column(name = "nombre")
+    private TipoRecurso tipoRecurso;
     private String nombre;
-    @Basic
-    @Column(name = "es_consulta_sanitaria")
     private boolean esConsultaSanitaria;
-    @Basic
-    @Column(name = "habilitado")
     private boolean habilitado;
 
     public int getIdRecurso() {
@@ -33,11 +23,11 @@ public class RecursoEntity {
         this.idRecurso = idRecurso;
     }
 
-    public TipoRecursoEntity getTipoRecurso() {
+    public TipoRecurso getTipoRecurso() {
         return tipoRecurso;
     }
 
-    public void setTipoRecurso(TipoRecursoEntity tipoRecurso) {
+    public void setTipoRecurso(TipoRecurso tipoRecurso) {
         this.tipoRecurso = tipoRecurso;
     }
 
@@ -63,16 +53,5 @@ public class RecursoEntity {
 
     public void setHabilitado(boolean habilitado) {
         this.habilitado = habilitado;
-    }
-
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
     }
 }

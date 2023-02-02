@@ -1,6 +1,6 @@
-package com.allavona.tfg.api.dto;
+package com.allavona.tfg.api.vo;
 
-public class LoginDTO {
+public class Login {
     private String username;
     private String password;
 

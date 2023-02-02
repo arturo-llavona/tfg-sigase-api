@@ -2,6 +2,7 @@ package com.allavona.tfg.business.bbdd.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -17,6 +18,9 @@ public class TipoRecursoEntity {
     @Basic
     @Column(name = "habilitado")
     private boolean habilitado;
+
+    @OneToMany(mappedBy="tipoRecurso", cascade=CascadeType.ALL, orphanRemoval = true)
+    private List<RecursoEntity> recursos;
 
     public int getIdTipoRecurso() {
         return idTipoRecurso;
@@ -42,16 +46,21 @@ public class TipoRecursoEntity {
         this.habilitado = habilitado;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TipoRecursoEntity that = (TipoRecursoEntity) o;
-        return idTipoRecurso == that.idTipoRecurso && habilitado == that.habilitado && Objects.equals(nombre, that.nombre);
+    public List<RecursoEntity> getRecursos() {
+        return recursos;
+    }
+
+    public void setRecursos(List<RecursoEntity> recursos) {
+        this.recursos = recursos;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idTipoRecurso, nombre, habilitado);
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }
