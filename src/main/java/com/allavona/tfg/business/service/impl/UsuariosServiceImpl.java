@@ -21,7 +21,7 @@ public class UsuariosServiceImpl implements UsuariosService {
     private UsuarioEntityConverter usuarioEntityConverter = new UsuarioEntityConverter();
 
     @Override
-    public UsuarioDTO autenticar(Login usuario) {
+    public UsuarioDTO autenticar(UsuarioDTO usuario) {
         UsuarioEntity source = usuarioRepository.autenticar(usuario.getUsername(), EncryptUtils.encrypt(usuario.getPassword()));
         UsuarioDTO resp = Optional.ofNullable(source).map(t-> usuarioEntityConverter.convert(t)).orElse(null);
         if ( resp != null ) {

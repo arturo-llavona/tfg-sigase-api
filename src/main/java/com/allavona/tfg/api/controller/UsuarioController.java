@@ -30,7 +30,7 @@ public class UsuarioController implements UsuariosAPI {
     public ResponseEntity autenticar(@RequestBody Login login ) {
 
 
-        return Optional.ofNullable(usuariosService.autenticar(login))
+        return Optional.ofNullable(usuariosService.autenticar(usuarioDtoConverter.convert(login)))
                 .map(usuario -> usuarioDtoConverter.convert(usuario))
                 .map(ResponseEntity::ok).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
