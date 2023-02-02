@@ -4,6 +4,8 @@ import com.allavona.tfg.api.converter.RecursoDtoConverter;
 import com.allavona.tfg.api.vo.Recurso;
 import com.allavona.tfg.business.bbdd.entity.RecursoEntity;
 import com.allavona.tfg.business.bbdd.repository.RecursoRepository;
+import com.allavona.tfg.business.converter.RecursoEntityConverter;
+import com.allavona.tfg.business.dto.RecursoDTO;
 import com.allavona.tfg.business.service.RecursosService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,12 +16,12 @@ public class RecursosServiceImpl implements RecursosService {
     @Autowired
     private RecursoRepository recursoRepository;
 
-    private RecursoDtoConverter recursoDtoConverter = new RecursoDtoConverter();
+    private RecursoEntityConverter recursoEntityConverter = new RecursoEntityConverter();
 
     @Override
-    public List<Recurso> findAll() {
+    public List<RecursoDTO> findAll() {
         List<RecursoEntity> source =  recursoRepository.findAll();
-        List<Recurso> recursos = source.stream().map(recurso -> recursoDtoConverter.convert(recurso)).toList();
+        List<RecursoDTO> recursos = source.stream().map(recurso -> recursoEntityConverter.convert(recurso)).toList();
         return recursos;
     }
 }

@@ -1,17 +1,16 @@
-package com.allavona.tfg.api.converter;
+package com.allavona.tfg.business.converter;
 
 import com.allavona.tfg.api.vo.Recurso;
 import com.allavona.tfg.business.bbdd.entity.RecursoEntity;
-import com.allavona.tfg.business.bbdd.repository.RecursoRepository;
 import com.allavona.tfg.business.dto.RecursoDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class RecursoDtoConverter {
+public class RecursoEntityConverter {
     @Autowired
-    private TipoRecursoDtoConverter tipoRecursoDtoConverter = new TipoRecursoDtoConverter();
-    public Recurso convert(final RecursoDTO source ) {
-        final Recurso target = new Recurso();
+    private TipoRecursoEntityConverter tipoRecursoDtoConverter = new TipoRecursoEntityConverter();
+    public RecursoDTO convert(final RecursoEntity source ) {
+        final RecursoDTO target = new RecursoDTO();
         BeanUtils.copyProperties(source, target);
         target.setTipoRecurso(tipoRecursoDtoConverter.convert(source.getTipoRecurso()));
         return target;

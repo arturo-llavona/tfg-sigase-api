@@ -5,6 +5,8 @@ import com.allavona.tfg.api.vo.Login;
 import com.allavona.tfg.api.vo.Usuario;
 import com.allavona.tfg.business.bbdd.entity.UsuarioEntity;
 import com.allavona.tfg.business.bbdd.repository.UsuarioRepository;
+import com.allavona.tfg.business.converter.UsuarioEntityConverter;
+import com.allavona.tfg.business.dto.UsuarioDTO;
 import com.allavona.tfg.business.service.UsuariosService;
 import com.allavona.tfg.business.utils.EncryptUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +18,12 @@ public class UsuariosServiceImpl implements UsuariosService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    private UsuarioDtoConverter usuarioDtoConverter = new UsuarioDtoConverter();
+    private UsuarioEntityConverter usuarioEntityConverter = new UsuarioEntityConverter();
 
     @Override
-    public Usuario autenticar(Login usuario) {
+    public UsuarioDTO autenticar(Login usuario) {
         UsuarioEntity source = usuarioRepository.autenticar(usuario.getUsername(), EncryptUtils.encrypt(usuario.getPassword()));
-        Usuario resp = Optional.ofNullable(source).map(t-> usuarioDtoConverter.convert(t)).orElse(null);
+        UsuarioDTO resp = Optional.ofNullable(source).map(t-> usuarioEntityConverter.convert(t)).orElse(null);
         if ( resp != null ) {
             resp.setPassword(null);
         }

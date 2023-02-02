@@ -20,7 +20,6 @@ public class ApiApplication {
 	}
 
 	@Bean
-	public RecursosService recursosService() {
-		return new RecursosServiceImpl();
-	}
+	public RecursosService recursosService() { return new RecursosServiceImpl(); }
+
 }
