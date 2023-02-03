@@ -11,11 +11,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
 
-@Tag(description = "API de Usuarios", name = "Usuarios")
+@Tag(description = "API de Usuarios", name = "Users")
     public interface UsuariosAPI {
     @Operation(summary="Verificación de credenciales",
             description="Comprueba si la tupla usuario - contraseña introducidos son correctos",
-            tags = {"Usuarios"})
+            tags = {"Users"})
     @ApiResponses( value = {
             @ApiResponse(responseCode = "200", description = "Login realizado correctamente", content = @Content(schema = @Schema(implementation = Usuario.class))),
             @ApiResponse(responseCode = "401", description = "Credenciales incorrectas", content = @Content(schema = @Schema(implementation = Void.class)))

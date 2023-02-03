@@ -16,11 +16,11 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 
-@Tag(description = "API de Incidentes", name = "Incidentes")
+@Tag(description = "API de Incidentes", name = "Incidents")
     public interface IncidentesAPI {
     @Operation(summary = "Realiza una búsqueda de incidentes",
             description = "Este servicio permite realizar una búsqueda de los incidentes, especificando si están aún en curso o no.",
-            tags = {"Incidentes"})
+            tags = {"Incidents"})
     @ApiResponses( value = {
             @ApiResponse(responseCode = "200", description = "Consulta finalizada con éxito", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidente.class))))
     })
@@ -29,7 +29,7 @@ import java.util.List;
 
     @Operation(summary="Busca la clasificación incidente",
             description="Este servicio permite realizar una búsqueda de las clasificaciones de los incidentes a partir del comienzo de su código.",
-            tags = {"Incidentes"})
+            tags = {"Incidents"})
     @ApiResponses( value = {
             @ApiResponse(responseCode = "404", description = "No se han encontrado resultados",
                     content = @Content(schema = @Schema(implementation = Void.class))),
@@ -39,7 +39,7 @@ import java.util.List;
 
     @Operation(summary="Obtiene la lista de recursos a movilizar para una clasificación",
             description="Este servicio devuelve el listado de los tipos de recursos recomendados a movilizar para una clasificación de incidente determinada",
-            tags = {"Incidentes"})
+            tags = {"Incidents"})
     @ApiResponses( value = {
             @ApiResponse(responseCode = "404", description = "No se han encontrado resultados",
                     content = @Content(schema = @Schema(implementation = Void.class))),

@@ -13,12 +13,12 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 
-@Tag(description = "API de Recursos", name = "Recursos")
+@Tag(description = "API de Recursos", name = "Resources")
     public interface RecursosAPI {
 
     @Operation(summary="Lista todos los recursos",
             description="Este servicio lista todos los recursos del sistema",
-            tags = {"Recursos"})
+            tags = {"Resources"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Consulta finalizada con éxito", content = @Content( array = @ArraySchema( schema = @Schema(implementation = Recurso.class)))),
             @ApiResponse(responseCode =  "401", description = "No se han encontrado resultados", content = @Content( schema = @Schema(implementation = Void.class)))
