@@ -28,7 +28,7 @@ public class RecursosServiceImpl implements RecursosService {
 
     @Override
     public List<RecursoDTO> findAll() {
-        List<RecursoEntity> source =  recursoRepository.findAll();
+        List<RecursoEntity> source =  recursoRepository.findByHabilitadoTrue();
         List<RecursoDTO> recursos = source.stream().map(recurso -> recursoEntityConverter.convert(recurso)).toList();
         return recursos;
     }
