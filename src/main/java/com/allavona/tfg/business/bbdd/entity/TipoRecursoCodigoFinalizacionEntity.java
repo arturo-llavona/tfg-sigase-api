@@ -6,7 +6,6 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tipo_recurso_codigo_finalizacion", schema = "public", catalog = "tfg")
-@IdClass(TipoRecursoCodigoFinalizacionEntityPK.class)
 public class TipoRecursoCodigoFinalizacionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

@@ -2,6 +2,7 @@ package com.allavona.tfg.business.bbdd.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -17,6 +18,9 @@ public class ClasificacionIncidenteEntity {
     @Basic
     @Column(name = "nombre")
     private String nombre;
+
+    @OneToMany(mappedBy="clasificacionIncidente", cascade=CascadeType.ALL, orphanRemoval = true)
+    private List<IncidenteEntity> incidentes;
 
     public int getIdClasificacionIncidente() {
         return idClasificacionIncidente;
@@ -42,16 +46,21 @@ public class ClasificacionIncidenteEntity {
         this.nombre = nombre;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ClasificacionIncidenteEntity that = (ClasificacionIncidenteEntity) o;
-        return idClasificacionIncidente == that.idClasificacionIncidente && Objects.equals(codigo, that.codigo) && Objects.equals(nombre, that.nombre);
+    public List<IncidenteEntity> getIncidentes() {
+        return incidentes;
+    }
+
+    public void setIncidentes(List<IncidenteEntity> incidentes) {
+        this.incidentes = incidentes;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idClasificacionIncidente, codigo, nombre);
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }

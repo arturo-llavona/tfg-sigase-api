@@ -1,42 +1,30 @@
-package com.allavona.tfg.business.bbdd.entity;
+package com.allavona.tfg.api.vo;
 
-import jakarta.persistence.*;
+import com.allavona.tfg.business.dto.ClasificacionIncidenteDTO;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Objects;
 
-@Entity
-@Table(name = "incidente", schema = "public", catalog = "tfg")
-public class IncidenteEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "id_incidente")
+
+public class Incidente implements Serializable {
+
     private int idIncidente;
-    @Basic
-    @Column(name = "fecha_creacion")
+
     private Object fechaCreacion;
-    @Basic
-    @Column(name = "fecha_finalizacion")
+
     private Object fechaFinalizacion;
-    @Basic
-    @Column(name = "alertante")
+
     private String alertante;
-    @Basic
-    @Column(name = "alias")
+
     private String alias;
-    @Basic
-    @Column(name = "localizacion_descripcion")
+
     private String localizacionDescripcion;
-    @Basic
-    @Column(name = "localizacion_longitud")
+
     private BigDecimal localizacionLongitud;
-    @Basic
-    @Column(name = "localizacion_latitud")
+
     private BigDecimal localizacionLatitud;
 
-    @ManyToOne()
-    @JoinColumn(name = "id_clasificacion_incidente")
-    private ClasificacionIncidenteEntity clasificacionIncidente;
+    private ClasificacionIncidente clasificacionIncidente;
 
     public int getIdIncidente() {
         return idIncidente;
@@ -102,11 +90,11 @@ public class IncidenteEntity {
         this.localizacionLatitud = localizacionLatitud;
     }
 
-    public ClasificacionIncidenteEntity getClasificacionIncidente() {
+    public ClasificacionIncidente getClasificacionIncidente() {
         return clasificacionIncidente;
     }
 
-    public void setClasificacionIncidente(ClasificacionIncidenteEntity clasificacionIncidente) {
+    public void setClasificacionIncidente(ClasificacionIncidente clasificacionIncidente) {
         this.clasificacionIncidente = clasificacionIncidente;
     }
 
