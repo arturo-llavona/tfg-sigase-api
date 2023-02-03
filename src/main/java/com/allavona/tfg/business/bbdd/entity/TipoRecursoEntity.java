@@ -3,7 +3,6 @@ package com.allavona.tfg.business.bbdd.entity;
 import jakarta.persistence.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "tipo_recurso", schema = "public", catalog = "tfg")

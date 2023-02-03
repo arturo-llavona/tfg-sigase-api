@@ -1,8 +1,5 @@
 package com.allavona.tfg.api.vo;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-
 import java.io.Serializable;
 
 public class TipoRecurso implements Serializable {

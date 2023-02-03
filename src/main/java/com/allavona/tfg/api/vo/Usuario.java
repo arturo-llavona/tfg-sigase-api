@@ -1,7 +1,6 @@
 package com.allavona.tfg.api.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.*;
 
 import java.io.Serializable;
 

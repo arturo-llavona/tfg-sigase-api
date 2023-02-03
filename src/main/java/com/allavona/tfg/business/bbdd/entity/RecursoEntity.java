@@ -2,8 +2,6 @@ package com.allavona.tfg.business.bbdd.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
-
 @Entity
 @Table(name = "recurso", schema = "public", catalog = "tfg")
 public class RecursoEntity {

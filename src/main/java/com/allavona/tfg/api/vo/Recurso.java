@@ -1,11 +1,5 @@
 package com.allavona.tfg.api.vo;
 
-import com.allavona.tfg.business.bbdd.entity.TipoRecursoEntity;
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-
 import java.io.Serializable;
 
 public class Recurso implements Serializable {

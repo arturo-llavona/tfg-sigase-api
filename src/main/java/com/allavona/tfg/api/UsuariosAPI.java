@@ -2,7 +2,6 @@ package com.allavona.tfg.api;
 
 import com.allavona.tfg.api.vo.Login;
 import com.allavona.tfg.api.vo.Usuario;
-import com.allavona.tfg.business.bbdd.entity.UsuarioEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

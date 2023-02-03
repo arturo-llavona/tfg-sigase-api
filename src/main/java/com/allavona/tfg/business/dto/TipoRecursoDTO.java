@@ -1,8 +1,6 @@
 package com.allavona.tfg.business.dto;
 
-import java.io.Serializable;
-
-public class TipoRecursoDTO implements Serializable {
+public class TipoRecursoDTO {
 
     private int idTipoRecurso;
     private String nombre;

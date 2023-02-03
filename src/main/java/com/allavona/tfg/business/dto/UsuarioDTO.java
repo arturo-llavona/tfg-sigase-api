@@ -2,9 +2,7 @@ package com.allavona.tfg.business.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.io.Serializable;
-
-public class UsuarioDTO implements Serializable {
+public class UsuarioDTO {
     private int idUsuario;
     private String nombre;
     private String apellido1;
