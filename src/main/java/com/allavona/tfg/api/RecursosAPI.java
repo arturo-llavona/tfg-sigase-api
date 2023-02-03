@@ -16,10 +16,12 @@ import java.util.List;
 @Tag(description = "API de Recursos", name = "Recursos")
     public interface RecursosAPI {
 
-    @Operation(summary="listar todos los recursos", description="Servicio que lista todos los recursos", tags = {"Recursos"})
+    @Operation(summary="Lista todos los recursos",
+            description="Este servicio lista todos los recursos del sistema",
+            tags = {"Recursos"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Listado de todos los recursos", content = @Content( array = @ArraySchema( schema = @Schema(implementation = Recurso.class)))),
-            @ApiResponse(responseCode =  "401", description = "No se ha encontrado ningún recurso", content = @Content( schema = @Schema(implementation = Void.class)))
+            @ApiResponse(responseCode = "200", description = "Consulta finalizada con éxito", content = @Content( array = @ArraySchema( schema = @Schema(implementation = Recurso.class)))),
+            @ApiResponse(responseCode =  "401", description = "No se han encontrado resultados", content = @Content( schema = @Schema(implementation = Void.class)))
     })
     ResponseEntity<List<Recurso>> listar();
 }

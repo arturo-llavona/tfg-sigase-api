@@ -13,11 +13,13 @@ import org.springframework.http.ResponseEntity;
 
 @Tag(description = "API de Usuarios", name = "Usuarios")
     public interface UsuariosAPI {
-
-    @Operation(summary="autenticar", description="Comprueba si el usuario y contraseña introducido es correcto", tags = {"Usuarios"})
+    @Operation(summary="Verificación de credenciales",
+            description="Comprueba si la tupla usuario - contraseña introducidos son correctos",
+            tags = {"Usuarios"})
     @ApiResponses( value = {
-            @ApiResponse(responseCode = "401", description = "Credenciales incorrectas", content = @Content(schema = @Schema(implementation = Void.class))),
-            @ApiResponse(responseCode = "200", description = "Login realizado correctamente", content = @Content(schema = @Schema(implementation = Usuario.class)))
+            @ApiResponse(responseCode = "200", description = "Login realizado correctamente", content = @Content(schema = @Schema(implementation = Usuario.class))),
+            @ApiResponse(responseCode = "401", description = "Credenciales incorrectas", content = @Content(schema = @Schema(implementation = Void.class)))
     })
     ResponseEntity<Usuario> autenticar(final Login login);
+
 }
