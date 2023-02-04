@@ -1,9 +1,9 @@
 package com.allavona.tfg.business.service.impl;
 
-import com.allavona.tfg.business.bbdd.entity.RecursoEntity;
-import com.allavona.tfg.business.bbdd.entity.TipoRecursoEntity;
-import com.allavona.tfg.business.bbdd.repository.RecursoRepository;
-import com.allavona.tfg.business.bbdd.repository.TipoRecursoRepository;
+import com.allavona.tfg.business.bbdd.entity.base.RecursoEntity;
+import com.allavona.tfg.business.bbdd.entity.base.TipoRecursoEntity;
+import com.allavona.tfg.business.bbdd.repository.base.RecursoRepository;
+import com.allavona.tfg.business.bbdd.repository.base.TipoRecursoRepository;
 import com.allavona.tfg.business.converter.RecursoEntityConverter;
 import com.allavona.tfg.business.converter.TipoRecursoEntityConverter;
 import com.allavona.tfg.business.dto.RecursoDTO;

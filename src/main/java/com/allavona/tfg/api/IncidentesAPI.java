@@ -1,9 +1,6 @@
 package com.allavona.tfg.api;
 
-import com.allavona.tfg.api.vo.ClasificacionIncidente;
-import com.allavona.tfg.api.vo.Incidente;
-import com.allavona.tfg.api.vo.TipoRecurso;
-import com.allavona.tfg.api.vo.Usuario;
+import com.allavona.tfg.api.vo.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,9 +19,9 @@ import java.util.List;
             description = "Este servicio permite realizar una búsqueda de los incidentes, especificando si están aún en curso o no.",
             tags = {"Incidents"})
     @ApiResponses( value = {
-            @ApiResponse(responseCode = "200", description = "Consulta finalizada con éxito", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidente.class))))
+            @ApiResponse(responseCode = "200", description = "Consulta finalizada con éxito", content = @Content(array = @ArraySchema(schema = @Schema(implementation = IncidenteListado.class))))
     })
-    ResponseEntity<List<Incidente>> buscarIncidentes(final boolean closed);
+    ResponseEntity<List<IncidenteListado>> buscarIncidentes(final boolean closed);
 
 
     @Operation(summary="Busca la clasificación incidente",

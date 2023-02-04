@@ -1,8 +1,5 @@
 package com.allavona.tfg.business.dto;
 
-import com.allavona.tfg.business.bbdd.entity.ClasificacionIncidenteEntity;
-import com.allavona.tfg.business.bbdd.entity.TipoRecursoEntity;
-
 public class PlantillaClasificacionIncidenteDTO {
     private int idPlantillaClasificacionIncidente;
     private ClasificacionIncidenteDTO clasificacionIncidente;

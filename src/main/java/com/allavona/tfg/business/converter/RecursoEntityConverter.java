@@ -1,6 +1,6 @@
 package com.allavona.tfg.business.converter;
 
-import com.allavona.tfg.business.bbdd.entity.RecursoEntity;
+import com.allavona.tfg.business.bbdd.entity.base.RecursoEntity;
 import com.allavona.tfg.business.dto.RecursoDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

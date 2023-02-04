@@ -4,6 +4,7 @@ import com.allavona.tfg.business.dto.ClasificacionIncidenteDTO;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 
 public class Incidente implements Serializable {
@@ -25,6 +26,8 @@ public class Incidente implements Serializable {
     private BigDecimal localizacionLatitud;
 
     private ClasificacionIncidente clasificacionIncidente;
+
+    private List<RecursoEstadoCompleto> recursos;
 
     public int getIdIncidente() {
         return idIncidente;
@@ -96,6 +99,14 @@ public class Incidente implements Serializable {
 
     public void setClasificacionIncidente(ClasificacionIncidente clasificacionIncidente) {
         this.clasificacionIncidente = clasificacionIncidente;
+    }
+
+    public List<RecursoEstadoCompleto> getRecursos() {
+        return recursos;
+    }
+
+    public void setRecursos(List<RecursoEstadoCompleto> recursos) {
+        this.recursos = recursos;
     }
 
     @Override

@@ -1,9 +1,7 @@
 package com.allavona.tfg.business.dto;
 
-import com.allavona.tfg.business.bbdd.entity.ClasificacionIncidenteEntity;
-import jakarta.persistence.*;
-
 import java.math.BigDecimal;
+import java.util.List;
 
 
 public class IncidenteDTO {
@@ -25,6 +23,8 @@ public class IncidenteDTO {
     private BigDecimal localizacionLatitud;
 
     private ClasificacionIncidenteDTO clasificacionIncidente;
+
+    private List<RecursoEstadoCompletoDTO> recursoEstadoCompleto;
 
     public int getIdIncidente() {
         return idIncidente;
@@ -96,6 +96,14 @@ public class IncidenteDTO {
 
     public void setClasificacionIncidente(ClasificacionIncidenteDTO clasificacionIncidente) {
         this.clasificacionIncidente = clasificacionIncidente;
+    }
+
+    public List<RecursoEstadoCompletoDTO> getRecursoEstadoCompleto() {
+        return recursoEstadoCompleto;
+    }
+
+    public void setRecursoEstadoCompleto(List<RecursoEstadoCompletoDTO> recursoEstadoCompleto) {
+        this.recursoEstadoCompleto = recursoEstadoCompleto;
     }
 
     @Override

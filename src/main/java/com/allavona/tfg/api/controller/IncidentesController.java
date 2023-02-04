@@ -3,10 +3,13 @@ package com.allavona.tfg.api.controller;
 import com.allavona.tfg.api.IncidentesAPI;
 import com.allavona.tfg.api.converter.ClasificacionIncidenteDtoConverter;
 import com.allavona.tfg.api.converter.IncidenteDtoConverter;
+import com.allavona.tfg.api.converter.IncidenteListadoDtoConverter;
 import com.allavona.tfg.api.converter.TipoRecursoDtoConverter;
 import com.allavona.tfg.api.vo.Incidente;
+import com.allavona.tfg.api.vo.IncidenteListado;
 import com.allavona.tfg.api.vo.TipoRecurso;
 import com.allavona.tfg.business.dto.IncidenteDTO;
+import com.allavona.tfg.business.dto.IncidenteListadoDTO;
 import com.allavona.tfg.business.service.IncidentesService;
 import com.allavona.tfg.business.service.RecursosService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,24 +33,23 @@ public class IncidentesController implements IncidentesAPI {
     @Autowired
     private RecursosService recursosService;
 
-    private IncidenteDtoConverter incidenteDtoConverter = new IncidenteDtoConverter();
+    private IncidenteListadoDtoConverter incidenteListadoDtoConverter = new IncidenteListadoDtoConverter();
     private ClasificacionIncidenteDtoConverter clasificacionIncidenteDtoConverter = new ClasificacionIncidenteDtoConverter();
-
     private TipoRecursoDtoConverter tipoRecursoDtoConverter = new TipoRecursoDtoConverter();
 
     @Override
     @RequestMapping(produces = { MediaType.APPLICATION_JSON_VALUE } , method = RequestMethod.GET)
-    public ResponseEntity<List<Incidente>> buscarIncidentes(
+    public ResponseEntity<List<IncidenteListado>> buscarIncidentes(
             @Parameter(description = "Parámetro que indica si el incidente ya ha sido finalizado.", required = false, schema = @Schema(type = "boolean"))
             @RequestParam(value = "closed", required = false, defaultValue = "false") final boolean closed) {
-        List<IncidenteDTO> source = null;
+        List<IncidenteListadoDTO> source = null;
         if ( closed ) {
             source = incidentesService.findIncidentesFinalizados();
         } else {
             source = incidentesService.findIncidentesEnCurso();
         }
         return Optional
-                .of(source.stream().map( incidenteDTO -> incidenteDtoConverter.convert(incidenteDTO)).toList())
+                .of(source.stream().map( incidenteDTO -> incidenteListadoDtoConverter.convert(incidenteDTO)).toList())
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
@@ -60,13 +62,12 @@ public class IncidentesController implements IncidentesAPI {
             @RequestParam(value = "codigo", required = false) final String codigo
     ) {
         return Optional
-                .of(incidentesService.findByCodigo(codigo)
+                .of(incidentesService.findClasificacionIncidenteByCodigo(codigo)
                         .stream()
                         .map(clasificacionIncidenteDTO -> clasificacionIncidenteDtoConverter.convert(clasificacionIncidenteDTO)).toList())
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
-
     @Override
     @RequestMapping(path = "/classifications/{id}/recommended-resources-type-list", produces = {MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.GET)
     public ResponseEntity<List<TipoRecurso>> buscarPlantillaClasificacionIncidente(

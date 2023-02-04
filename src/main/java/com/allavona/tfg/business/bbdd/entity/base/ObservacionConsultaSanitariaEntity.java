@@ -1,4 +1,4 @@
-package com.allavona.tfg.business.bbdd.entity;
+package com.allavona.tfg.business.bbdd.entity.base;
 
 import jakarta.persistence.*;
 

@@ -1,8 +1,6 @@
-package com.allavona.tfg.business.bbdd.entity;
+package com.allavona.tfg.business.bbdd.entity.base;
 
 import jakarta.persistence.*;
-
-import java.util.Objects;
 
 @Entity
 @Table(name = "plantilla_clasificacion_incidente", schema = "public", catalog = "tfg")

@@ -1,6 +1,6 @@
-package com.allavona.tfg.business.bbdd.repository;
+package com.allavona.tfg.business.bbdd.repository.base;
 
-import com.allavona.tfg.business.bbdd.entity.TipoRecursoEntity;
+import com.allavona.tfg.business.bbdd.entity.base.TipoRecursoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

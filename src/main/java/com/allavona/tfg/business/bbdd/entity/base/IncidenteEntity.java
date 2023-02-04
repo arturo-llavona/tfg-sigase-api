@@ -1,9 +1,8 @@
-package com.allavona.tfg.business.bbdd.entity;
+package com.allavona.tfg.business.bbdd.entity.base;
 
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Entity
 @Table(name = "incidente", schema = "public", catalog = "tfg")

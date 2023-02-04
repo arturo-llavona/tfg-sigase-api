@@ -1,6 +1,6 @@
 package com.allavona.tfg.business.converter;
 
-import com.allavona.tfg.business.bbdd.entity.PlantillaClasificacionIncidenteEntity;
+import com.allavona.tfg.business.bbdd.entity.base.PlantillaClasificacionIncidenteEntity;
 import com.allavona.tfg.business.dto.PlantillaClasificacionIncidenteDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
