@@ -4,6 +4,7 @@ import com.allavona.tfg.api.IncidentesAPI;
 import com.allavona.tfg.api.converter.ClasificacionIncidenteDtoConverter;
 import com.allavona.tfg.api.converter.IncidenteListadoDtoConverter;
 import com.allavona.tfg.api.converter.TipoRecursoDtoConverter;
+import com.allavona.tfg.api.vo.IncidenteCompleto;
 import com.allavona.tfg.api.vo.IncidenteListado;
 import com.allavona.tfg.api.vo.TipoRecurso;
 import com.allavona.tfg.business.dto.IncidenteListadoDTO;
@@ -39,10 +40,10 @@ public class IncidentesController extends BaseController implements IncidentesAP
     @Override
     @RequestMapping(produces = { MediaType.APPLICATION_JSON_VALUE } , method = RequestMethod.GET)
     public ResponseEntity<List<IncidenteListado>> buscarIncidentes(
-            @Parameter(description = "Parámetro que indica si el incidente ya ha sido finalizado.", required = false, schema = @Schema(type = "boolean"))
-            @RequestParam(value = "closed", required = false, defaultValue = "false") final boolean closed,
             @Parameter(description = TIPO_USUARIO_HEADER_DESCRIPTION, required=true, schema = @Schema(type = "string", allowableValues = { "AGENTE", "MEDICO", "ADMINISTRADOR"}) )
-            @RequestHeader(value = TIPO_USUARIO_HEADER, required = true) final String tipoUsuario) {
+            @RequestHeader(value = TIPO_USUARIO_HEADER, required = true) final String tipoUsuario,
+            @Parameter(description = "Parámetro que indica si el incidente ya ha sido finalizado.", required = false, schema = @Schema(type = "boolean"))
+            @RequestParam(value = "closed", required = false, defaultValue = "false") final boolean closed) {
         List<IncidenteListadoDTO> source = null;
 
         if (isUsuarioConPerfilConsulta(tipoUsuario)) {
@@ -59,7 +60,19 @@ public class IncidentesController extends BaseController implements IncidentesAP
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-
+    @Override
+    @RequestMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE } , method = RequestMethod.GET)
+    public ResponseEntity<IncidenteCompleto> obtenerIncidente(
+            @Parameter(description = TIPO_USUARIO_HEADER_DESCRIPTION, required=true, schema = @Schema(type = "string", allowableValues = { "AGENTE", "MEDICO", "ADMINISTRADOR"}) )
+            @RequestHeader(value = TIPO_USUARIO_HEADER, required = true) final String tipoUsuario,
+            @Parameter(description = "Identificador del incidente.", required = true)
+            @PathVariable(name="id", required = true) final Integer idIncidente) {
+        if (isUsuarioConPerfilConsulta(tipoUsuario)) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
     @Override
     @RequestMapping(path = "/classifications", produces = {MediaType.APPLICATION_JSON_VALUE }, method = RequestMethod.GET)
     public ResponseEntity buscarClasificacionIncidente(

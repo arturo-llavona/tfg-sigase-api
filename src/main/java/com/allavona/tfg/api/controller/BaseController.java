@@ -1,6 +1,6 @@
 package com.allavona.tfg.api.controller;
 
-import com.allavona.tfg.api.TipoUsuarioEnum;
+import com.allavona.tfg.api.enums.TipoUsuarioEnum;
 
 public class BaseController {
     public static boolean isUsuarioConPerfilConsulta(String tipoUsuario) {

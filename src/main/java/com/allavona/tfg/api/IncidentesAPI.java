@@ -19,18 +19,26 @@ import java.util.List;
             description = "Este servicio permite realizar una búsqueda de los incidentes, especificando si están aún en curso o no.",
             tags = {"Incidents"})
     @ApiResponses( value = {
-            @ApiResponse(responseCode = "200", description = "Consulta finalizada con éxito", content = @Content(array = @ArraySchema(schema = @Schema(implementation = IncidenteListado.class))))
+            @ApiResponse(responseCode = "200", description = "Consulta finalizada con éxito", content = @Content(array = @ArraySchema(schema = @Schema(implementation = IncidenteListado.class)))),
+            @ApiResponse(responseCode = "401", description = "Acceso no autorizado", content = @Content(schema = @Schema(implementation = Void.class)))
     })
-    ResponseEntity<List<IncidenteListado>> buscarIncidentes(final boolean closed, final String tipoUsuario);
+    ResponseEntity<List<IncidenteListado>> buscarIncidentes(final String tipoUsuario, final boolean closed);
 
+    @Operation(summary = "Obtiene el detalle de un incidente",
+            description = "Este servicio permite consultar el detalle completo de un incidente.",
+            tags = {"Incidents"})
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "Consulta finalizada con éxito", content = @Content(array = @ArraySchema(schema = @Schema(implementation = IncidenteCompleto.class)))),
+            @ApiResponse(responseCode = "401", description = "Acceso no autorizado", content = @Content(schema = @Schema(implementation = Void.class)))
+    })
+    ResponseEntity<IncidenteCompleto> obtenerIncidente(final String tipoUsuario, final Integer idIncidente);
 
     @Operation(summary="Busca la clasificación incidente",
             description="Este servicio permite realizar una búsqueda de las clasificaciones de los incidentes a partir del comienzo de su código.",
             tags = {"Incidents"})
     @ApiResponses( value = {
-            @ApiResponse(responseCode = "404", description = "No se han encontrado resultados",
-                    content = @Content(schema = @Schema(implementation = Void.class))),
-            @ApiResponse(responseCode = "200", description = "Consulta finalizada con éxito", content = @Content(schema = @Schema(implementation = ClasificacionIncidente.class)))
+            @ApiResponse(responseCode = "200", description = "Consulta finalizada con éxito", content = @Content(schema = @Schema(implementation = ClasificacionIncidente.class))),
+            @ApiResponse(responseCode = "404", description = "No se han encontrado resultados", content = @Content(schema = @Schema(implementation = Void.class)))
     })
     ResponseEntity<ClasificacionIncidente> buscarClasificacionIncidente(final String codigo);
 
@@ -38,9 +46,8 @@ import java.util.List;
             description="Este servicio devuelve el listado de los tipos de recursos recomendados a movilizar para una clasificación de incidente determinada",
             tags = {"Incidents"})
     @ApiResponses( value = {
-            @ApiResponse(responseCode = "404", description = "No se han encontrado resultados",
-                    content = @Content(schema = @Schema(implementation = Void.class))),
-            @ApiResponse(responseCode = "200", description = "Consulta finalizada con éxito", content = @Content(schema = @Schema(implementation = TipoRecurso.class)))
+            @ApiResponse(responseCode = "200", description = "Consulta finalizada con éxito", content = @Content(schema = @Schema(implementation = TipoRecurso.class))),
+            @ApiResponse(responseCode = "404", description = "No se han encontrado resultados", content = @Content(schema = @Schema(implementation = Void.class)))
     })
     ResponseEntity<List<TipoRecurso>> buscarPlantillaClasificacionIncidente(final Integer idClasificacionIncidente);
 }

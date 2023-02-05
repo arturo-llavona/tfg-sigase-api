@@ -1,4 +1,4 @@
-package com.allavona.tfg.api;
+package com.allavona.tfg.api.enums;
 
 public enum TipoUsuarioEnum {
     AGENTE(1), MEDICO(2), ADMINISTRADOR(3);
