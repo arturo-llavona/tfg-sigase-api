@@ -16,9 +16,7 @@ public class RecursoEntity {
     @Basic
     @Column(name = "nombre")
     private String nombre;
-    @Basic
-    @Column(name = "es_consulta_sanitaria")
-    private boolean esConsultaSanitaria;
+
     @Basic
     @Column(name = "habilitado")
     private boolean habilitado;
@@ -47,14 +45,6 @@ public class RecursoEntity {
         this.nombre = nombre;
     }
 
-    public boolean isEsConsultaSanitaria() {
-        return esConsultaSanitaria;
-    }
-
-    public void setEsConsultaSanitaria(boolean esConsultaSanitaria) {
-        this.esConsultaSanitaria = esConsultaSanitaria;
-    }
-
     public boolean isHabilitado() {
         return habilitado;
     }
@@ -62,7 +52,6 @@ public class RecursoEntity {
     public void setHabilitado(boolean habilitado) {
         this.habilitado = habilitado;
     }
-
 
     @Override
     public int hashCode() {

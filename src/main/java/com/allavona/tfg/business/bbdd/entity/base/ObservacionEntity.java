@@ -24,6 +24,10 @@ public class ObservacionEntity {
     @Column(name = "fecha")
     private Object fecha;
 
+    @Basic
+    @Column(name = "datos_medicos")
+    private boolean datosMedicos;
+
     public int getIdObservacion() {
         return idObservacion;
     }
@@ -64,16 +68,21 @@ public class ObservacionEntity {
         this.fecha = fecha;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ObservacionEntity that = (ObservacionEntity) o;
-        return idObservacion == that.idObservacion && idIncidente == that.idIncidente && idUsuario == that.idUsuario && Objects.equals(texto, that.texto) && Objects.equals(fecha, that.fecha);
+    public boolean isDatosMedicos() {
+        return datosMedicos;
+    }
+
+    public void setDatosMedicos(boolean datosMedicos) {
+        this.datosMedicos = datosMedicos;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idObservacion, idIncidente, idUsuario, texto, fecha);
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }

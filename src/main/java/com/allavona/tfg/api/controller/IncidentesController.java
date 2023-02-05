@@ -2,13 +2,10 @@ package com.allavona.tfg.api.controller;
 
 import com.allavona.tfg.api.IncidentesAPI;
 import com.allavona.tfg.api.converter.ClasificacionIncidenteDtoConverter;
-import com.allavona.tfg.api.converter.IncidenteDtoConverter;
 import com.allavona.tfg.api.converter.IncidenteListadoDtoConverter;
 import com.allavona.tfg.api.converter.TipoRecursoDtoConverter;
-import com.allavona.tfg.api.vo.Incidente;
 import com.allavona.tfg.api.vo.IncidenteListado;
 import com.allavona.tfg.api.vo.TipoRecurso;
-import com.allavona.tfg.business.dto.IncidenteDTO;
 import com.allavona.tfg.business.dto.IncidenteListadoDTO;
 import com.allavona.tfg.business.service.IncidentesService;
 import com.allavona.tfg.business.service.RecursosService;
@@ -23,10 +20,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import static com.allavona.tfg.api.utils.Constants.*;
+
 @RestController
 @RequestMapping(path="/v1/incidents", produces="application/json")
 @CrossOrigin(origins="*")
-public class IncidentesController implements IncidentesAPI {
+public class IncidentesController extends BaseController implements IncidentesAPI {
     @Autowired
     private IncidentesService incidentesService;
 
@@ -41,17 +40,24 @@ public class IncidentesController implements IncidentesAPI {
     @RequestMapping(produces = { MediaType.APPLICATION_JSON_VALUE } , method = RequestMethod.GET)
     public ResponseEntity<List<IncidenteListado>> buscarIncidentes(
             @Parameter(description = "Parámetro que indica si el incidente ya ha sido finalizado.", required = false, schema = @Schema(type = "boolean"))
-            @RequestParam(value = "closed", required = false, defaultValue = "false") final boolean closed) {
+            @RequestParam(value = "closed", required = false, defaultValue = "false") final boolean closed,
+            @Parameter(description = TIPO_USUARIO_HEADER_DESCRIPTION, required=true, schema = @Schema(type = "string", allowableValues = { "AGENTE", "MEDICO", "ADMINISTRADOR"}) )
+            @RequestHeader(value = TIPO_USUARIO_HEADER, required = true) final String tipoUsuario) {
         List<IncidenteListadoDTO> source = null;
-        if ( closed ) {
-            source = incidentesService.findIncidentesFinalizados();
+
+        if (isUsuarioConPerfilConsulta(tipoUsuario)) {
+            if (closed) {
+                source = incidentesService.findIncidentesFinalizados();
+            } else {
+                source = incidentesService.findIncidentesEnCurso();
+            }
+            return Optional
+                    .of(source.stream().map(incidenteDTO -> incidenteListadoDtoConverter.convert(incidenteDTO)).toList())
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
         } else {
-            source = incidentesService.findIncidentesEnCurso();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return Optional
-                .of(source.stream().map( incidenteDTO -> incidenteListadoDtoConverter.convert(incidenteDTO)).toList())
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @Override

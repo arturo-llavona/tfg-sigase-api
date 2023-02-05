@@ -21,7 +21,7 @@ import java.util.List;
     @ApiResponses( value = {
             @ApiResponse(responseCode = "200", description = "Consulta finalizada con éxito", content = @Content(array = @ArraySchema(schema = @Schema(implementation = IncidenteListado.class))))
     })
-    ResponseEntity<List<IncidenteListado>> buscarIncidentes(final boolean closed);
+    ResponseEntity<List<IncidenteListado>> buscarIncidentes(final boolean closed, final String tipoUsuario);
 
 
     @Operation(summary="Busca la clasificación incidente",
