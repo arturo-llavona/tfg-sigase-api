@@ -1,6 +1,6 @@
 package com.allavona.tfg.business.converter;
 
-import com.allavona.tfg.business.bbdd.entity.base.ClasificacionIncidenteEntity;
+import com.allavona.tfg.business.bbdd.entity.ClasificacionIncidenteEntity;
 import com.allavona.tfg.business.dto.ClasificacionIncidenteDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;

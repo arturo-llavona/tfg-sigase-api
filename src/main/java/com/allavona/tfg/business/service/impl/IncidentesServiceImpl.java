@@ -1,8 +1,8 @@
 package com.allavona.tfg.business.service.impl;
 
-import com.allavona.tfg.business.bbdd.entity.base.ClasificacionIncidenteEntity;
-import com.allavona.tfg.business.bbdd.entity.base.IncidenteEntity;
-import com.allavona.tfg.business.bbdd.repository.base.*;
+import com.allavona.tfg.business.bbdd.entity.ClasificacionIncidenteEntity;
+import com.allavona.tfg.business.bbdd.entity.IncidenteEntity;
+import com.allavona.tfg.business.bbdd.repository.*;
 import com.allavona.tfg.business.converter.ClasificacionIncidenteEntityConverter;
 import com.allavona.tfg.business.dto.*;
 import com.allavona.tfg.business.service.IncidentesService;

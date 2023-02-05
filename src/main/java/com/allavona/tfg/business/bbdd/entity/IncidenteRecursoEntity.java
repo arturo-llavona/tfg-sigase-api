@@ -1,4 +1,4 @@
-package com.allavona.tfg.business.bbdd.entity.base;
+package com.allavona.tfg.business.bbdd.entity;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;

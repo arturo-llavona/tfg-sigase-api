@@ -1,7 +1,7 @@
 package com.allavona.tfg.business.service.impl;
 
-import com.allavona.tfg.business.bbdd.entity.base.UsuarioEntity;
-import com.allavona.tfg.business.bbdd.repository.base.UsuarioRepository;
+import com.allavona.tfg.business.bbdd.entity.UsuarioEntity;
+import com.allavona.tfg.business.bbdd.repository.UsuarioRepository;
 import com.allavona.tfg.business.converter.UsuarioEntityConverter;
 import com.allavona.tfg.business.dto.UsuarioDTO;
 import com.allavona.tfg.business.service.UsuariosService;
