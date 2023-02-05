@@ -5,8 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Objects;
-
 @Entity
 @Table(name = "usuario", schema = "public", catalog = "tfg")
 @Setter @Getter @EqualsAndHashCode

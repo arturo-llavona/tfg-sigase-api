@@ -5,8 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Objects;
-
 @Entity
 @Table(name = "plantilla_clasificacion_incidente", schema = "public", catalog = "tfg")
 @Setter
