@@ -1,14 +1,21 @@
 package com.allavona.tfg.api.controller;
 
-import com.allavona.tfg.api.enums.TipoUsuarioEnum;
+import com.allavona.tfg.api.converter.UsuarioDtoConverter;
+import com.allavona.tfg.api.vo.Usuario;
+import com.allavona.tfg.business.service.UsuariosService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
+@RestController
 public class BaseController {
-    public static boolean isUsuarioConPerfilConsulta(String tipoUsuario) {
-        TipoUsuarioEnum tipoUsuarioEnum = TipoUsuarioEnum.valueOf(tipoUsuario);
-        if ( tipoUsuarioEnum != null && (tipoUsuarioEnum.equals(TipoUsuarioEnum.AGENTE) ||
-                tipoUsuarioEnum.equals(TipoUsuarioEnum.MEDICO)) ) {
-            return true;
-        }
-        return false;
+    @Autowired
+    public UsuariosService usuariosService;
+
+    public UsuarioDtoConverter usuarioDtoConverter = new UsuarioDtoConverter();
+
+    public Usuario getUsuarioById(Integer idUsuario) {
+        return Optional.ofNullable(usuariosService.getUsuarioById(idUsuario)).map(t -> usuarioDtoConverter.convert(t)).orElse(null);
     }
 }

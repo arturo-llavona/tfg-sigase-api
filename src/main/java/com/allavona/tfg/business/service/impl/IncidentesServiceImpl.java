@@ -1,44 +1,43 @@
 package com.allavona.tfg.business.service.impl;
 
-import com.allavona.tfg.business.bbdd.entity.IncidenteListadoEntity;
-import com.allavona.tfg.business.bbdd.entity.RecursoIncidenteListadoEntity;
 import com.allavona.tfg.business.bbdd.entity.base.ClasificacionIncidenteEntity;
 import com.allavona.tfg.business.bbdd.entity.base.IncidenteEntity;
-import com.allavona.tfg.business.bbdd.entity.RecursoEstadoCompletoEntity;
-import com.allavona.tfg.business.bbdd.repository.IncidenteListadoRepository;
-import com.allavona.tfg.business.bbdd.repository.RecursosIncidenteListadoRepository;
-import com.allavona.tfg.business.bbdd.repository.base.ClasificacionIncidenteRepository;
-import com.allavona.tfg.business.bbdd.repository.base.IncidenteRepository;
-import com.allavona.tfg.business.bbdd.repository.RecursosIncidenteRepository;
-import com.allavona.tfg.business.converter.*;
+import com.allavona.tfg.business.bbdd.repository.base.*;
+import com.allavona.tfg.business.converter.ClasificacionIncidenteEntityConverter;
 import com.allavona.tfg.business.dto.*;
 import com.allavona.tfg.business.service.IncidentesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class IncidentesServiceImpl implements IncidentesService {
     @Autowired
+    private IncidenteRepository incidenteRepository;
+    @Autowired
+    private ObservacionRepository observacionRepository;
+    @Autowired
+    private IncidentePersonaAfectadaRepository incidentePersonaAfectadaRepository;
+    @Autowired
+    private IncidenteRecursoRepository incidenteRecursoRepository;
+    @Autowired
+    private RecursoRepository recursoRepository;
+    @Autowired
+    private IncidenteRecursoEstadoRepository incidenteRecursoEstadoRepository;
+    @Autowired
+    private RecursoEstadoRepository recursoEstadoRepository;
+    @Autowired
+    private PlantillaClasificacionIncidenteRepository plantillaClasificacionIncidenteRepository;
+    @Autowired
+    private TipoRecursoRepository tipoRecursoRepository;
+    @Autowired
     private ClasificacionIncidenteRepository clasificacionIncidenteRepository;
-
     @Autowired
-    private IncidenteListadoRepository incidenteListadoRepository;
-
-    @Autowired
-    private RecursosIncidenteListadoRepository recursosIncidenteListadoRepository;
+    private UsuarioRepository usuarioRepository;
 
     private ClasificacionIncidenteEntityConverter clasificacionIncidenteEntityConverter = new ClasificacionIncidenteEntityConverter();
-
-    private IncidenteEntityConverter incidenteEntityConverter = new IncidenteEntityConverter();
-
-    private RecursoEstadoCompletoEntityConverter recursoEstadoCompletoEntityConverter = new RecursoEstadoCompletoEntityConverter();
-
-    private IncidenteListadoEntityConverter incidenteListadoEntityConverter = new IncidenteListadoEntityConverter();
-
-    private RecursoIncidenteListadoEntityConverter recursoIncidenteListadoEntityConverter = new RecursoIncidenteListadoEntityConverter();
 
     @Override
     public List<ClasificacionIncidenteDTO> findClasificacionIncidenteByCodigo(final String codigo) {
@@ -48,26 +47,95 @@ public class IncidentesServiceImpl implements IncidentesService {
     }
 
     @Override
-    public List<IncidenteListadoDTO> findIncidentesEnCurso() {
-        List<IncidenteListadoEntity> source = incidenteListadoRepository.findIncidenteEnCursoListado();
-        List<IncidenteListadoDTO> incidentes = source.stream().map(x -> incidenteListadoEntityConverter.convert(x)).toList();
-        incidentes.forEach( incidente -> {
-            List<RecursoIncidenteListadoEntity> recursoIncidenteListadoEntities = recursosIncidenteListadoRepository.findRecursosIncidente(incidente.getIdIncidente());
-            List<RecursoIncidenteListadoDTO> recursoIncidenteListadoDTOS = recursoIncidenteListadoEntities.stream().map(x -> recursoIncidenteListadoEntityConverter.convert(x)).toList();
-            incidente.setRecursos(recursoIncidenteListadoDTOS);
-        });
-        return incidentes;
+    public List<IncidenteDTO> findIncidentesEnCurso() {
+        return incidenteRepository.findByFechaFinalizacionIsNull().stream().map(i -> rellenarDatosIncidenteDTO(i, false, false, false)).toList();
+    }
+    @Override
+    public List<IncidenteDTO> findIncidentesFinalizados() {
+        return incidenteRepository.findByFechaFinalizacionIsNotNull().stream().map(i -> rellenarDatosIncidenteDTO(i, false, false, false)).toList();
     }
 
     @Override
-    public List<IncidenteListadoDTO> findIncidentesFinalizados() {
-        List<IncidenteListadoEntity> source = incidenteListadoRepository.findIncidenteFinalizadoListado();
-        List<IncidenteListadoDTO> incidentes = source.stream().map(x -> incidenteListadoEntityConverter.convert(x)).toList();
-        incidentes.forEach( incidente -> {
-            List<RecursoIncidenteListadoEntity> recursoIncidenteListadoEntities = recursosIncidenteListadoRepository.findRecursosIncidente(incidente.getIdIncidente());
-            List<RecursoIncidenteListadoDTO> recursoIncidenteListadoDTOS = recursoIncidenteListadoEntities.stream().map(x -> recursoIncidenteListadoEntityConverter.convert(x)).toList();
-            incidente.setRecursos(recursoIncidenteListadoDTOS);
-        });
-        return incidentes;
+    public IncidenteDTO findIncidenteById(final Integer idIncidente) {
+        return incidenteRepository.findById(idIncidente).map(i -> rellenarDatosIncidenteDTO(i, true, true, true)).get();
+    }
+    public IncidenteDTO rellenarDatosIncidenteDTO(IncidenteEntity i, boolean cargarObservaciones, boolean cargarPersonaAfectada, boolean cargarPlantillaRecursos) {
+        IncidenteDTO incidenteDTO = IncidenteDTO.builder()
+                .idIncidente(i.getIdIncidente())
+                .fechaCreacion(i.getFechaCreacion())
+                .fechaFinalizacion(i.getFechaFinalizacion())
+                .alertante(i.getAlertante())
+                .alias(i.getAlias())
+                .localizacionDescripcion(i.getLocalizacionDescripcion())
+                .localizacionLatitud(i.getLocalizacionLatitud())
+                .localizacionLongitud(i.getLocalizacionLongitud())
+                .build();
+
+        if ( cargarObservaciones ) {
+            incidenteDTO.setObservaciones(observacionRepository.findAllByIdIncidente(i.getIdIncidente()).stream().map(o -> {
+                    return ObservacionDTO.builder()
+                            .idObservacion(o.getIdObservacion())
+                            .texto(o.getTexto())
+                            .fecha(o.getFecha())
+                            .datosMedicos(o.isDatosMedicos())
+                            .usuario(usuarioRepository.findById(o.getIdUsuario()).map( u -> UsuarioDTO.builder()
+                                    .idUsuario(u.getIdUsuario())
+                                    .nombre(u.getNombre())
+                                    .apellido1(u.getApellido1())
+                                    .apellido2(u.getApellido2())
+                                    .username(u.getUsername())
+                                    .build()).get())
+                            .build();
+            }).toList());
+        }
+        if ( cargarPersonaAfectada ) {
+            incidenteDTO.setPersonaAfectada(Optional.ofNullable(incidentePersonaAfectadaRepository.findByIdIncidente(i.getIdIncidente())).map(p ->
+                    IncidentePersonaAfectadaDTO.builder()
+                            .idIncidentePersonaAfectada(p.getIdIncidentePersonaAfectada())
+                            .nombre(p.getNombre())
+                            .apellidos(p.getApellidos())
+                            .edad(p.getEdad())
+                            .tipoEdad(p.getTipoEdad())
+                            .sexo(p.getSexo())
+                            .dni(p.getDni())
+                            .telefono(p.getTelefono())
+                            .centroSalud(p.getCentroSalud())
+                            .tarjetaSanitaria(p.getTarjetaSanitaria())
+                            .build()
+            ).get());
+        }
+        if ( cargarPlantillaRecursos ) {
+            incidenteDTO.setPlantillaRecursos(plantillaClasificacionIncidenteRepository
+                    .findAllByIdClasificacionIncidente(i.getClasificacionIncidente().getIdClasificacionIncidente()).stream().map(
+                            t -> tipoRecursoRepository.findById(t.getIdTipoRecurso()).map(tr -> TipoRecursoDTO.builder()
+                                    .idTipoRecurso(tr.getIdTipoRecurso())
+                                    .habilitado(tr.isHabilitado())
+                                    .nombre(tr.getNombre())
+                                    .build()).get()
+                    ).toList());
+        }
+        incidenteDTO.setRecursos(
+                incidenteRecursoRepository.findAllByIdIncidente(i.getIdIncidente()).stream().map(
+                        ir -> recursoRepository.findById(ir.getIdRecurso()).map(r-> Optional.ofNullable(incidenteRecursoEstadoRepository
+                                        .findByIdRecursoAndIdIncidente(r.getIdRecurso(), i.getIdIncidente()))
+                                .map(ire -> RecursoDTO.builder()
+                                        .idRecurso(r.getIdRecurso())
+                                        .nombre(r.getNombre())
+                                        .habilitado(r.isHabilitado())
+                                        .tipoRecurso(tipoRecursoRepository.findById(r.getTipoRecurso().getIdTipoRecurso()).map(tr -> TipoRecursoDTO.builder()
+                                                .idTipoRecurso(tr.getIdTipoRecurso())
+                                                .habilitado(tr.isHabilitado())
+                                                .nombre(tr.getNombre())
+                                                .build()).get())
+                                        .estado(
+                                                recursoEstadoRepository.findById(ire.getIdRecursoEstado())
+                                                        .map(re -> EstadoRecursoDTO.builder()
+                                                                .idRecursoEstado(re.getIdRecursoEstado())
+                                                                .nombreEstado(re.getNombreEstado())
+                                                                .fechaEstado(ire.getFecha())
+                                                                .build()).get())
+                                        .build()).get()).get()
+                ).toList());
+        return incidenteDTO;
     }
 }

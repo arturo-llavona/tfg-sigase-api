@@ -27,4 +27,13 @@ public class UsuariosServiceImpl implements UsuariosService {
         }
         return resp;
     }
+
+    @Override
+    public UsuarioDTO getUsuarioById(Integer idUsuario) {
+        return repository.findById(idUsuario).map(t -> {
+            UsuarioDTO usuario = converter.convert(t);
+            usuario.setPassword(null);
+            return usuario;
+        }).orElse(null);
+    }
 }

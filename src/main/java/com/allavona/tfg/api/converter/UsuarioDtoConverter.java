@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class UsuarioDtoConverter {
     public Usuario convert(final UsuarioDTO source ) {
-        final Usuario target = new Usuario();
+        final Usuario target = Usuario.builder().build();
         BeanUtils.copyProperties(source, target);
         return target;
     }
 
     public UsuarioDTO convert(final Login source) {
-        final UsuarioDTO target = new UsuarioDTO();
+        final UsuarioDTO target = UsuarioDTO.builder().build();
         BeanUtils.copyProperties(source, target);
         return target;
     }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class UsuarioEntityConverter {
 
     public UsuarioDTO convert(final UsuarioEntity source) {
-        final UsuarioDTO target = new UsuarioDTO();
+        final UsuarioDTO target = UsuarioDTO.builder().build();
         BeanUtils.copyProperties(source, target);
         return target;
     }

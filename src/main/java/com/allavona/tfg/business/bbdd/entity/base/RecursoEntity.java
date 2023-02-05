@@ -1,9 +1,13 @@
 package com.allavona.tfg.business.bbdd.entity.base;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "recurso", schema = "public", catalog = "tfg")
+@Setter @Getter @EqualsAndHashCode
 public class RecursoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -20,46 +24,4 @@ public class RecursoEntity {
     @Basic
     @Column(name = "habilitado")
     private boolean habilitado;
-
-    public int getIdRecurso() {
-        return idRecurso;
-    }
-
-    public void setIdRecurso(int idRecurso) {
-        this.idRecurso = idRecurso;
-    }
-
-    public TipoRecursoEntity getTipoRecurso() {
-        return tipoRecurso;
-    }
-
-    public void setTipoRecurso(TipoRecursoEntity tipoRecurso) {
-        this.tipoRecurso = tipoRecurso;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public boolean isHabilitado() {
-        return habilitado;
-    }
-
-    public void setHabilitado(boolean habilitado) {
-        this.habilitado = habilitado;
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
-    }
 }

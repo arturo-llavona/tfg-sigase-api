@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TipoRecursoDtoConverter {
     public TipoRecurso convert(final TipoRecursoDTO source ) {
-        final TipoRecurso target = new TipoRecurso();
+        final TipoRecurso target = TipoRecurso.builder().build();
         BeanUtils.copyProperties(source, target);
         return target;
     }

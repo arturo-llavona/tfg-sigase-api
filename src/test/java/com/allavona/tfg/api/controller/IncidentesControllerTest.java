@@ -2,7 +2,6 @@ package com.allavona.tfg.api.controller;
 
 import com.allavona.tfg.business.dto.ClasificacionIncidenteDTO;
 import com.allavona.tfg.business.dto.IncidenteDTO;
-import com.allavona.tfg.business.dto.IncidenteListadoDTO;
 import com.allavona.tfg.business.dto.TipoRecursoDTO;
 import com.allavona.tfg.business.service.IncidentesService;
 import com.allavona.tfg.business.service.RecursosService;
@@ -13,7 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class IncidentesControllerTest {
@@ -26,7 +26,7 @@ class IncidentesControllerTest {
     @Test
     @DisplayName("Buscar incidentes")
     void buscarIncidentes() {
-        List<IncidenteListadoDTO> incidentesEnCurso = incidentesService.findIncidentesEnCurso();
+        List<IncidenteDTO> incidentesEnCurso = incidentesService.findIncidentesEnCurso();
         assertNotNull(incidentesEnCurso);
         assertTrue(incidentesEnCurso.size() > 0);
     }

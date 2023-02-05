@@ -12,7 +12,7 @@ public class RecursoEntityConverter {
     private TipoRecursoEntityConverter tipoRecursoEntityConverter = new TipoRecursoEntityConverter();
 
     public RecursoDTO convert(final RecursoEntity source ) {
-        final RecursoDTO target = new RecursoDTO();
+        final RecursoDTO target = RecursoDTO.builder().build();
         BeanUtils.copyProperties(source, target);
         target.setTipoRecurso(tipoRecursoEntityConverter.convert(source.getTipoRecurso()));
         return target;

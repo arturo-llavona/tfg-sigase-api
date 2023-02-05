@@ -2,12 +2,13 @@ package com.allavona.tfg.api.controller;
 
 import com.allavona.tfg.api.IncidentesAPI;
 import com.allavona.tfg.api.converter.ClasificacionIncidenteDtoConverter;
-import com.allavona.tfg.api.converter.IncidenteListadoDtoConverter;
+import com.allavona.tfg.api.converter.IncidenteDtoConverter;
 import com.allavona.tfg.api.converter.TipoRecursoDtoConverter;
-import com.allavona.tfg.api.vo.IncidenteCompleto;
-import com.allavona.tfg.api.vo.IncidenteListado;
+import com.allavona.tfg.api.utils.SecurityUtils;
+import com.allavona.tfg.api.vo.Incidente;
 import com.allavona.tfg.api.vo.TipoRecurso;
-import com.allavona.tfg.business.dto.IncidenteListadoDTO;
+import com.allavona.tfg.api.vo.Usuario;
+import com.allavona.tfg.business.dto.IncidenteDTO;
 import com.allavona.tfg.business.service.IncidentesService;
 import com.allavona.tfg.business.service.RecursosService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,7 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-import static com.allavona.tfg.api.utils.Constants.*;
+import static com.allavona.tfg.api.utils.Constants.ID_USUARIO_HEADER;
+import static com.allavona.tfg.api.utils.Constants.ID_USUARIO_HEADER_DESCRIPTION;
 
 @RestController
 @RequestMapping(path="/v1/incidents", produces="application/json")
@@ -29,49 +31,48 @@ import static com.allavona.tfg.api.utils.Constants.*;
 public class IncidentesController extends BaseController implements IncidentesAPI {
     @Autowired
     private IncidentesService incidentesService;
-
     @Autowired
     private RecursosService recursosService;
 
-    private IncidenteListadoDtoConverter incidenteListadoDtoConverter = new IncidenteListadoDtoConverter();
+    private IncidenteDtoConverter incidenteDtoConverter = new IncidenteDtoConverter();
     private ClasificacionIncidenteDtoConverter clasificacionIncidenteDtoConverter = new ClasificacionIncidenteDtoConverter();
     private TipoRecursoDtoConverter tipoRecursoDtoConverter = new TipoRecursoDtoConverter();
 
     @Override
     @RequestMapping(produces = { MediaType.APPLICATION_JSON_VALUE } , method = RequestMethod.GET)
-    public ResponseEntity<List<IncidenteListado>> buscarIncidentes(
-            @Parameter(description = TIPO_USUARIO_HEADER_DESCRIPTION, required=true, schema = @Schema(type = "string", allowableValues = { "AGENTE", "MEDICO", "ADMINISTRADOR"}) )
-            @RequestHeader(value = TIPO_USUARIO_HEADER, required = true) final String tipoUsuario,
+    public ResponseEntity<List<Incidente>> buscarIncidentes(
+            @Parameter(description = ID_USUARIO_HEADER_DESCRIPTION, required=true)
+            @RequestHeader(value = ID_USUARIO_HEADER, required = true) final Integer idUsuario,
             @Parameter(description = "Parámetro que indica si el incidente ya ha sido finalizado.", required = false, schema = @Schema(type = "boolean"))
             @RequestParam(value = "closed", required = false, defaultValue = "false") final boolean closed) {
-        List<IncidenteListadoDTO> source = null;
+        Usuario usuario = getUsuarioById(idUsuario);
+        SecurityUtils.checkIsUsuarioConPerfilConsulta(usuario);
 
-        if (isUsuarioConPerfilConsulta(tipoUsuario)) {
-            if (closed) {
-                source = incidentesService.findIncidentesFinalizados();
-            } else {
-                source = incidentesService.findIncidentesEnCurso();
-            }
-            return Optional
-                    .of(source.stream().map(incidenteDTO -> incidenteListadoDtoConverter.convert(incidenteDTO)).toList())
-                    .map(ResponseEntity::ok)
-                    .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        List<IncidenteDTO> source;
+        if (closed) {
+            source = incidentesService.findIncidentesFinalizados();
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            source = incidentesService.findIncidentesEnCurso();
         }
+        List<Incidente> incidentes = SecurityUtils.filtrarObservacionesConDatosMedicos(
+                source.stream().map(i -> incidenteDtoConverter.convert(i)).toList(), usuario);
+        return Optional
+                .of(incidentes).map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
     @Override
     @RequestMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE } , method = RequestMethod.GET)
-    public ResponseEntity<IncidenteCompleto> obtenerIncidente(
-            @Parameter(description = TIPO_USUARIO_HEADER_DESCRIPTION, required=true, schema = @Schema(type = "string", allowableValues = { "AGENTE", "MEDICO", "ADMINISTRADOR"}) )
-            @RequestHeader(value = TIPO_USUARIO_HEADER, required = true) final String tipoUsuario,
+    public ResponseEntity<Incidente> obtenerIncidente(
+            @Parameter(description = ID_USUARIO_HEADER_DESCRIPTION, required=true )
+            @RequestHeader(value = ID_USUARIO_HEADER, required = true) final Integer idUsuario,
             @Parameter(description = "Identificador del incidente.", required = true)
             @PathVariable(name="id", required = true) final Integer idIncidente) {
-        if (isUsuarioConPerfilConsulta(tipoUsuario)) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+
+        Usuario usuario = getUsuarioById(idUsuario);
+        SecurityUtils.checkIsUsuarioConPerfilConsulta(usuario);
+        Incidente incidente = Optional.of(incidentesService.findIncidenteById(idIncidente)).map(i-> incidenteDtoConverter.convert(i)).get();
+        SecurityUtils.filtrarObservacionesConDatosMedicos(incidente, usuario);
+        return Optional.of(incidente).map(ResponseEntity::ok).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
     @Override
     @RequestMapping(path = "/classifications", produces = {MediaType.APPLICATION_JSON_VALUE }, method = RequestMethod.GET)
