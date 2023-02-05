@@ -13,7 +13,6 @@ public class UsuarioDtoConverter {
         BeanUtils.copyProperties(source, target);
         return target;
     }
-
     public UsuarioDTO convert(final Login source) {
         final UsuarioDTO target = UsuarioDTO.builder().build();
         BeanUtils.copyProperties(source, target);

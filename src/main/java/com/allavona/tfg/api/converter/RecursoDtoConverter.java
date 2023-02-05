@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 public class RecursoDtoConverter {
     @Autowired
     private TipoRecursoDtoConverter tipoRecursoDtoConverter = new TipoRecursoDtoConverter();
-
     public Recurso convert(final RecursoDTO source ) {
         final Recurso target = Recurso.builder().build();
         BeanUtils.copyProperties(source, target);

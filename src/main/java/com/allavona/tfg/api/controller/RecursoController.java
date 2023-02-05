@@ -20,9 +20,7 @@ import java.util.Optional;
 public class RecursoController implements RecursosAPI {
     @Autowired
     private RecursosService recursosService;
-
     private RecursoDtoConverter recursoDtoConverter = new RecursoDtoConverter();
-
     @Override
     @RequestMapping( produces = {MediaType.APPLICATION_JSON_VALUE }, method = RequestMethod.GET)
     public ResponseEntity listar() {

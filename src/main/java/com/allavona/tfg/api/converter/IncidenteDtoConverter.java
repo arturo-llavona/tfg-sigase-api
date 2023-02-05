@@ -12,7 +12,6 @@ import java.util.Optional;
 public class IncidenteDtoConverter {
     @Autowired
     private ObservacionDtoConverter observacionDtoConverter = new ObservacionDtoConverter();
-
     public Incidente convert(final IncidenteDTO source ) {
         final Incidente target = Incidente.builder().build();
         BeanUtils.copyProperties(source, target);

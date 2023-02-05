@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 public class ObservacionDtoConverter {
     @Autowired
     private UsuarioDtoConverter usuarioDtoConverter = new UsuarioDtoConverter();
-
     public Observacion convert(final ObservacionDTO source ) {
         final Observacion target = Observacion.builder().build();
         BeanUtils.copyProperties(source, target);

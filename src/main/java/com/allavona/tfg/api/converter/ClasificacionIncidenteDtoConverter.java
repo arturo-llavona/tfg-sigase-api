@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ClasificacionIncidenteDtoConverter {
-
     public ClasificacionIncidente convert(final ClasificacionIncidenteDTO source ) {
         final ClasificacionIncidente target = ClasificacionIncidente.builder().build();
         BeanUtils.copyProperties(source, target);

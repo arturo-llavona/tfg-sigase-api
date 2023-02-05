@@ -33,11 +33,9 @@ public class IncidentesController extends BaseController implements IncidentesAP
     private IncidentesService incidentesService;
     @Autowired
     private RecursosService recursosService;
-
     private IncidenteDtoConverter incidenteDtoConverter = new IncidenteDtoConverter();
     private ClasificacionIncidenteDtoConverter clasificacionIncidenteDtoConverter = new ClasificacionIncidenteDtoConverter();
     private TipoRecursoDtoConverter tipoRecursoDtoConverter = new TipoRecursoDtoConverter();
-
     @Override
     @RequestMapping(produces = { MediaType.APPLICATION_JSON_VALUE } , method = RequestMethod.GET)
     public ResponseEntity<List<Incidente>> buscarIncidentes(
