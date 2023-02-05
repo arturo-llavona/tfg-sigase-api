@@ -7,7 +7,7 @@ import lombok.ToString;
 
 @Getter @Setter @Builder @ToString
 public class TipoRecursoDTO {
-    private int idTipoRecurso;
+    private Integer idTipoRecurso;
     private String nombre;
-    private boolean habilitado;
+    private Boolean habilitado;
 }

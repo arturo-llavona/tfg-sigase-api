@@ -1,14 +1,21 @@
 package com.allavona.tfg.business.service.impl;
 
+import com.allavona.tfg.api.enums.TipoUsuarioEnum;
+import com.allavona.tfg.api.vo.Incidente;
+import com.allavona.tfg.api.vo.Observacion;
 import com.allavona.tfg.business.bbdd.entity.ClasificacionIncidenteEntity;
 import com.allavona.tfg.business.bbdd.entity.IncidenteEntity;
+import com.allavona.tfg.business.bbdd.entity.IncidentePersonaAfectadaEntity;
+import com.allavona.tfg.business.bbdd.entity.ObservacionEntity;
 import com.allavona.tfg.business.bbdd.repository.*;
 import com.allavona.tfg.business.converter.ClasificacionIncidenteEntityConverter;
+import com.allavona.tfg.business.converter.IncidenteEntityConverter;
 import com.allavona.tfg.business.dto.*;
 import com.allavona.tfg.business.service.IncidentesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +46,8 @@ public class IncidentesServiceImpl implements IncidentesService {
 
     private ClasificacionIncidenteEntityConverter clasificacionIncidenteEntityConverter = new ClasificacionIncidenteEntityConverter();
 
+    private IncidenteEntityConverter incidenteEntityConverter = new IncidenteEntityConverter();
+
     @Override
     public List<ClasificacionIncidenteDTO> findClasificacionIncidenteByCodigo(final String codigo) {
         List<ClasificacionIncidenteEntity> source =  clasificacionIncidenteRepository.findByCodigoStartingWith(codigo);
@@ -59,6 +68,38 @@ public class IncidentesServiceImpl implements IncidentesService {
     public IncidenteDTO findIncidenteById(final Integer idIncidente) {
         return incidenteRepository.findById(idIncidente).map(i -> rellenarDatosIncidenteDTO(i, true, true, true)).get();
     }
+    @Override
+    public IncidenteDTO crearIncidente(final UsuarioDTO usuario, final IncidenteDTO incidente) {
+        IncidenteEntity nuevoIncidente = new IncidenteEntity();
+        nuevoIncidente.setAlertante(incidente.getAlertante());
+        nuevoIncidente.setAlias(incidente.getAlias());
+        nuevoIncidente.setLocalizacionDescripcion(incidente.getLocalizacionDescripcion());
+        nuevoIncidente.setLocalizacionLongitud(incidente.getLocalizacionLongitud());
+        nuevoIncidente.setLocalizacionLatitud(incidente.getLocalizacionLatitud());
+        nuevoIncidente.setFechaCreacion(new Date());
+        nuevoIncidente.setClasificacionIncidente(clasificacionIncidenteEntityConverter.convert(incidente.getClasificacionIncidente()));
+        nuevoIncidente = incidenteRepository.save(nuevoIncidente);
+
+        List<ObservacionDTO> observaciones = incidente.getObservaciones();
+        if ( observaciones != null && observaciones.size() > 0 ) {
+            for (int i = 0; i < observaciones.size(); i++) {
+                ObservacionDTO observacion = observaciones.get(i);
+                ObservacionEntity nuevaObservacion = new ObservacionEntity();
+                nuevaObservacion.setIdIncidente(nuevoIncidente.getIdIncidente());
+                nuevaObservacion.setTexto(observacion.getTexto());
+                if (TipoUsuarioEnum.MEDICO.getId().equals(usuario.getTipoUsuario()) && observacion.isDatosMedicos() ) {
+                    nuevaObservacion.setDatosMedicos(true);
+                } else {
+                    nuevaObservacion.setDatosMedicos(false);
+                }
+                nuevaObservacion.setIdUsuario(usuario.getIdUsuario());
+                nuevaObservacion.setFecha(new Date());
+                observacionRepository.save(nuevaObservacion);
+            }
+        }
+
+        return rellenarDatosIncidenteDTO(nuevoIncidente, true, true, true);
+    }
     public IncidenteDTO rellenarDatosIncidenteDTO(IncidenteEntity i, boolean cargarObservaciones, boolean cargarPersonaAfectada, boolean cargarPlantillaRecursos) {
         IncidenteDTO incidenteDTO = IncidenteDTO.builder()
                 .idIncidente(i.getIdIncidente())
@@ -69,6 +110,7 @@ public class IncidentesServiceImpl implements IncidentesService {
                 .localizacionDescripcion(i.getLocalizacionDescripcion())
                 .localizacionLatitud(i.getLocalizacionLatitud())
                 .localizacionLongitud(i.getLocalizacionLongitud())
+                .clasificacionIncidente(clasificacionIncidenteEntityConverter.convert(i.getClasificacionIncidente()))
                 .build();
 
         if ( cargarObservaciones ) {
@@ -89,20 +131,21 @@ public class IncidentesServiceImpl implements IncidentesService {
             }).toList());
         }
         if ( cargarPersonaAfectada ) {
-            incidenteDTO.setPersonaAfectada(Optional.ofNullable(incidentePersonaAfectadaRepository.findByIdIncidente(i.getIdIncidente())).map(p ->
-                    IncidentePersonaAfectadaDTO.builder()
-                            .idIncidentePersonaAfectada(p.getIdIncidentePersonaAfectada())
-                            .nombre(p.getNombre())
-                            .apellidos(p.getApellidos())
-                            .edad(p.getEdad())
-                            .tipoEdad(p.getTipoEdad())
-                            .sexo(p.getSexo())
-                            .dni(p.getDni())
-                            .telefono(p.getTelefono())
-                            .centroSalud(p.getCentroSalud())
-                            .tarjetaSanitaria(p.getTarjetaSanitaria())
-                            .build()
-            ).get());
+            IncidentePersonaAfectadaEntity incidentePersonaAfectadaEntity = incidentePersonaAfectadaRepository.findByIdIncidente(i.getIdIncidente());
+            if ( incidentePersonaAfectadaEntity != null ) {
+                incidenteDTO.setPersonaAfectada(IncidentePersonaAfectadaDTO.builder()
+                        .idIncidentePersonaAfectada(incidentePersonaAfectadaEntity.getIdIncidentePersonaAfectada())
+                        .nombre(incidentePersonaAfectadaEntity.getNombre())
+                        .apellidos(incidentePersonaAfectadaEntity.getApellidos())
+                        .edad(incidentePersonaAfectadaEntity.getEdad())
+                        .tipoEdad(incidentePersonaAfectadaEntity.getTipoEdad())
+                        .sexo(incidentePersonaAfectadaEntity.getSexo())
+                        .dni(incidentePersonaAfectadaEntity.getDni())
+                        .telefono(incidentePersonaAfectadaEntity.getTelefono())
+                        .centroSalud(incidentePersonaAfectadaEntity.getCentroSalud())
+                        .tarjetaSanitaria(incidentePersonaAfectadaEntity.getTarjetaSanitaria())
+                        .build());
+            }
         }
         if ( cargarPlantillaRecursos ) {
             incidenteDTO.setPlantillaRecursos(plantillaClasificacionIncidenteRepository
@@ -138,4 +181,5 @@ public class IncidentesServiceImpl implements IncidentesService {
                 ).toList());
         return incidenteDTO;
     }
+
 }

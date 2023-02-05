@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Getter @Setter @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClasificacionIncidente implements Serializable {
-    private int idClasificacionIncidente;
+    private Integer idClasificacionIncidente;
     private String codigo;
     private String nombre;
 }

@@ -1,16 +1,14 @@
 package com.allavona.tfg.business.bbdd.entity;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 @Table(name = "incidente", schema = "public", catalog = "tfg")
-@Getter @Setter @EqualsAndHashCode
+@Getter @Setter @EqualsAndHashCode @ToString
 public class IncidenteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -33,12 +31,13 @@ public class IncidenteEntity {
     private String localizacionDescripcion;
     @Basic
     @Column(name = "localizacion_longitud")
-    private BigDecimal localizacionLongitud;
+    private String localizacionLongitud;
     @Basic
     @Column(name = "localizacion_latitud")
-    private BigDecimal localizacionLatitud;
+    private String localizacionLatitud;
 
     @ManyToOne()
     @JoinColumn(name = "id_clasificacion_incidente")
     private ClasificacionIncidenteEntity clasificacionIncidente;
+
 }

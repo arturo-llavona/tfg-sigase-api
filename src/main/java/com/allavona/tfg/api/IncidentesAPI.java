@@ -1,8 +1,6 @@
 package com.allavona.tfg.api;
 
-import com.allavona.tfg.api.vo.ClasificacionIncidente;
-import com.allavona.tfg.api.vo.Incidente;
-import com.allavona.tfg.api.vo.TipoRecurso;
+import com.allavona.tfg.api.vo.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,6 +32,13 @@ import java.util.List;
             @ApiResponse(responseCode = "401", description = "Acceso no autorizado", content = @Content(schema = @Schema(implementation = Void.class)))
     })
     ResponseEntity<Incidente> obtenerIncidente(final Integer idUsuario, final Integer idIncidente);
+
+    @Operation(summary = "Crea un nuevo incidente", description = "Este servicio permite crear un nuevo incidente.", tags = { "Incidents"})
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "201", description = "Incidente creado con éxito", content = @Content(schema = @Schema(implementation = Void.class))),
+            @ApiResponse(responseCode = "401", description  = "Acceso no autorizado", content = @Content(schema = @Schema(implementation = Void.class)))
+    })
+    ResponseEntity<Incidente> crearIncidente(final Integer idUsuario, final Incidente incidente);
 
     @Operation(summary="Busca la clasificación incidente",
             description="Este servicio permite realizar una búsqueda de las clasificaciones de los incidentes a partir del comienzo de su código.",

@@ -13,8 +13,17 @@ public class ObservacionDtoConverter {
     public Observacion convert(final ObservacionDTO source ) {
         final Observacion target = Observacion.builder().build();
         BeanUtils.copyProperties(source, target);
-        target.setUsuario(usuarioDtoConverter.convert(source.getUsuario()));
+        if ( source.getUsuario() != null ) {
+            target.setUsuario(usuarioDtoConverter.convert(source.getUsuario()));
+        }
         return target;
     }
-
+    public ObservacionDTO convert(final Observacion source ) {
+        final ObservacionDTO target = ObservacionDTO.builder().build();
+        BeanUtils.copyProperties(source, target);
+        if ( source.getUsuario() != null ) {
+            target.setUsuario(usuarioDtoConverter.convert(source.getUsuario()));
+        }
+        return target;
+    }
 }

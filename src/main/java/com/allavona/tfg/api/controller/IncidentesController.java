@@ -5,7 +5,9 @@ import com.allavona.tfg.api.converter.ClasificacionIncidenteDtoConverter;
 import com.allavona.tfg.api.converter.IncidenteDtoConverter;
 import com.allavona.tfg.api.converter.TipoRecursoDtoConverter;
 import com.allavona.tfg.api.utils.SecurityUtils;
+import com.allavona.tfg.api.utils.URLConstants;
 import com.allavona.tfg.api.vo.Incidente;
+import com.allavona.tfg.api.vo.Login;
 import com.allavona.tfg.api.vo.TipoRecurso;
 import com.allavona.tfg.api.vo.Usuario;
 import com.allavona.tfg.business.dto.IncidenteDTO;
@@ -22,14 +24,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.net.URI;
+import java.net.URLClassLoader;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.allavona.tfg.api.utils.Constants.ID_USUARIO_HEADER;
 import static com.allavona.tfg.api.utils.Constants.ID_USUARIO_HEADER_DESCRIPTION;
 
 @RestController
-@RequestMapping(path="/v1/incidents", produces="application/json")
+@RequestMapping(path= URLConstants.INCIDENTS_V1_URL, produces= MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins="*")
 public class IncidentesController extends BaseController implements IncidentesAPI {
     @Autowired
@@ -93,7 +98,10 @@ public class IncidentesController extends BaseController implements IncidentesAP
 
             respuesta = Optional.of(incidente).map(ResponseEntity::ok).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
         } catch (ResponseStatusException e) {
-            logger.warn("Un usuario ha intentado acceder a un recurso al que no tenía permiso.", e.getMessage());
+            logger.warn("Un usuario ha intentado acceder a un recurso al que no tenía permiso.");
+        } catch (NoSuchElementException e) {
+          logger.warn("Se ha intentado acceder a un recurso que no existe.");
+          respuesta = ResponseEntity.notFound().build();
         } catch (Exception e) {
             logger.error("Ha ocurrido un error", e.getMessage());
         } finally {
@@ -101,7 +109,30 @@ public class IncidentesController extends BaseController implements IncidentesAP
         }
     }
     @Override
-    @RequestMapping(path = "/classifications", produces = {MediaType.APPLICATION_JSON_VALUE }, method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity crearIncidente(
+            @Parameter(description = ID_USUARIO_HEADER_DESCRIPTION, required=true )
+            @RequestHeader(value = ID_USUARIO_HEADER, required = true) final Integer idUsuario,
+            @RequestBody final Incidente incidente) {
+        ResponseEntity<Incidente> respuesta = ResponseEntity.badRequest().build();
+        try {
+            Usuario usuario = getUsuarioById(idUsuario);
+            SecurityUtils.checkIsUsuarioConPerfilConsulta(usuario);
+            logger.info("Se va a proceder a insertar en base de datos el un incidente.");
+            logger.debug(incidente.toString());
+            IncidenteDTO incidenteCreado = incidentesService.crearIncidente(usuarioDtoConverter.convert(usuario), incidenteDtoConverter.convert(incidente));
+            logger.info("Se ha creado el incidente correctamente.");
+            logger.debug(incidenteCreado.toString());
+            URI location = URI.create(String.format(URLConstants.INCIDENTS_V1_URL + "/%d", incidenteCreado.getIdIncidente()));
+            respuesta = ResponseEntity.created(location).build();
+        } catch ( Exception e) {
+            logger.error("Ha ocurrido un error", e.getMessage());
+            e.printStackTrace();
+        }
+        return respuesta;
+    }
+    @Override
+    @RequestMapping(path = URLConstants.CLASSIFICATIONS_URL, produces = {MediaType.APPLICATION_JSON_VALUE }, method = RequestMethod.GET)
     public ResponseEntity buscarClasificacionIncidente(
             @Parameter(description = "Inicio del código que se está buscando.", required = false,
                     schema = @Schema(type = "string"))
@@ -122,7 +153,7 @@ public class IncidentesController extends BaseController implements IncidentesAP
         }
     }
     @Override
-    @RequestMapping(path = "/classifications/{id}/recommended-resources-type-list", produces = {MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.GET)
+    @RequestMapping(path = URLConstants.CLASSIFICATIONS_TEMPLATE_URL, produces = {MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.GET)
     public ResponseEntity<List<TipoRecurso>> buscarPlantillaClasificacionIncidente(
             @Parameter(description = "Identificador de la clasificación del incidente.", required = true)
             @PathVariable(name="id", required = true) final Integer id) {

@@ -12,4 +12,10 @@ public class ClasificacionIncidenteDtoConverter {
         BeanUtils.copyProperties(source, target);
         return target;
     }
+
+    public ClasificacionIncidenteDTO convert(final ClasificacionIncidente source ) {
+        final ClasificacionIncidenteDTO target = ClasificacionIncidenteDTO.builder().build();
+        BeanUtils.copyProperties(source, target);
+        return target;
+    }
 }

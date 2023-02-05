@@ -7,7 +7,7 @@ import lombok.ToString;
 
 @Getter @Setter @ToString @Builder
 public class RecursoDTO {
-    private int idRecurso;
+    private Integer idRecurso;
     private TipoRecursoDTO tipoRecurso;
     private String nombre;
     private boolean esConsultaSanitaria;

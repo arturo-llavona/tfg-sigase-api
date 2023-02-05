@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Getter @Setter @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Usuario implements Serializable {
-    private int idUsuario;
+    private Integer idUsuario;
     private String nombre;
     private String apellido1;
     private String apellido2;

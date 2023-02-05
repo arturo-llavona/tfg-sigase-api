@@ -9,7 +9,7 @@ import java.sql.Date;
 
 @Getter @Setter @Builder @ToString
 public class IncidentePersonaAfectadaDTO {
-    private int idIncidentePersonaAfectada;
+    private Integer idIncidentePersonaAfectada;
     private Date fechaNacimiento;
     private String nombre;
     private String apellidos;

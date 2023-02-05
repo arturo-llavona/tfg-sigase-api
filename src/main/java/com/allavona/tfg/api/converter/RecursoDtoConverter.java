@@ -13,7 +13,9 @@ public class RecursoDtoConverter {
     public Recurso convert(final RecursoDTO source ) {
         final Recurso target = Recurso.builder().build();
         BeanUtils.copyProperties(source, target);
-        target.setTipoRecurso(tipoRecursoDtoConverter.convert(source.getTipoRecurso()));
+        if ( source.getTipoRecurso() != null ) {
+            target.setTipoRecurso(tipoRecursoDtoConverter.convert(source.getTipoRecurso()));
+        }
         return target;
     }
 }

@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Getter @Setter @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TipoRecurso implements Serializable {
-    private int idTipoRecurso;
+    private Integer idTipoRecurso;
     private String nombre;
-    private boolean habilitado;
+    private Boolean habilitado;
 }
