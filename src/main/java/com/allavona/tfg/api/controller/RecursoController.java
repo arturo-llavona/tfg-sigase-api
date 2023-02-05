@@ -2,6 +2,7 @@ package com.allavona.tfg.api.controller;
 
 import com.allavona.tfg.api.RecursosAPI;
 import com.allavona.tfg.api.converter.RecursoDtoConverter;
+import com.allavona.tfg.api.utils.URLConstants;
 import com.allavona.tfg.business.service.RecursosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path="/v1/resources", produces="application/json")
+@RequestMapping(path= URLConstants.RESOURCES_V1_URL, produces= MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins="*")
 public class RecursoController implements RecursosAPI {
     @Autowired
