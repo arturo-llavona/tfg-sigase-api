@@ -13,10 +13,7 @@ import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,8 +31,10 @@ public class RecursoController extends BaseController implements RecursosAPI {
 
     @Override
     @RequestMapping( produces = {MediaType.APPLICATION_JSON_VALUE }, method = RequestMethod.GET)
-    public ResponseEntity listar() {
-        List<RecursoDTO> source = recursosService.findAll();
+    public ResponseEntity listar(
+            @RequestParam(value="type", required = false) final Integer idTipoRecurso,
+            @RequestParam(value = "onlyAvailable", required = false, defaultValue = "true") final Boolean onlyAvailable) {
+        List<RecursoDTO> source = onlyAvailable ? recursosService.findRecursosDisponibles(idTipoRecurso) : recursosService.findAll(idTipoRecurso);
         List<Recurso> target = (List<Recurso>) this.genericConversionService.convert(source, TypeDescriptor.forObject(source), TypeDescriptor.collection(List.class, TypeDescriptor.valueOf(Recurso.class)));
         return Optional
                 .of(target).map(ResponseEntity::ok)

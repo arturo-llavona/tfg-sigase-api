@@ -18,7 +18,7 @@ class RecursoControllerTest {
     @Test
     @DisplayName("Listar recursos habilitados")
     void listar() {
-        List<RecursoDTO> recursos =  recursosService.findAll();
+        List<RecursoDTO> recursos =  recursosService.findAll(null);
         assertNotNull(recursos);
         assertTrue(recursos.size() > 0);
     }

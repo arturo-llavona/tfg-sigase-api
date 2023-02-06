@@ -23,5 +23,5 @@ import java.util.List;
             @ApiResponse(responseCode = "200", description = "Consulta finalizada con éxito", content = @Content( array = @ArraySchema( schema = @Schema(implementation = Recurso.class)))),
             @ApiResponse(responseCode =  "401", description = "No se han encontrado resultados", content = @Content( schema = @Schema(implementation = Void.class)))
     })
-    ResponseEntity<List<Recurso>> listar();
+    ResponseEntity<List<Recurso>> listar(final Integer tipoRecurso, final Boolean onlyAvailable);
 }

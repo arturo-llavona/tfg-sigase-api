@@ -9,7 +9,6 @@ import com.allavona.tfg.business.converter.TipoRecursoEntityConverter;
 import com.allavona.tfg.business.dto.RecursoDTO;
 import com.allavona.tfg.business.dto.TipoRecursoDTO;
 import com.allavona.tfg.business.service.RecursosService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,8 +28,15 @@ public class RecursosServiceImpl implements RecursosService {
     private TipoRecursoEntityConverter tipoRecursoEntityConverter = new TipoRecursoEntityConverter();
 
     @Override
-    public List<RecursoDTO> findAll() {
-        List<RecursoEntity> source =  recursoRepository.findByHabilitadoTrue();
+    public List<RecursoDTO> findAll(final Integer idTipoRecurso) {
+        List<RecursoEntity> source =  idTipoRecurso != null ? recursoRepository.findRecursosHabilitados(idTipoRecurso) : recursoRepository.findRecursosHabilitados();
+        List<RecursoDTO> recursos = source.stream().map(recurso -> recursoEntityConverter.convert(recurso)).toList();
+        return recursos;
+    }
+
+    @Override
+    public List<RecursoDTO> findRecursosDisponibles(final Integer idTipoRecurso) {
+        List<RecursoEntity> source = idTipoRecurso != null ? recursoRepository.findRecursosDisponibles(idTipoRecurso) : recursoRepository.findRecursosDisponibles();
         List<RecursoDTO> recursos = source.stream().map(recurso -> recursoEntityConverter.convert(recurso)).toList();
         return recursos;
     }
