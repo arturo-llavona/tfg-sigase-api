@@ -1,11 +1,9 @@
 package com.allavona.tfg.business.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-@Getter @Setter @Builder @ToString
+@Data
+@Builder
 public class TipoRecursoDTO {
     private Integer idTipoRecurso;
     private String nombre;

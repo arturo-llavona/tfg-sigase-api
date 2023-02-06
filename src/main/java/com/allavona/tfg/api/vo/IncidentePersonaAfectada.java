@@ -1,13 +1,11 @@
 package com.allavona.tfg.api.vo;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.sql.Date;
 
-@Getter @Setter @Builder @ToString
+@Data
+@Builder
 public class IncidentePersonaAfectada {
     private Integer idIncidentePersonaAfectada;
     private Date fechaNacimiento;

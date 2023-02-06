@@ -1,15 +1,13 @@
 package com.allavona.tfg.business.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-@Getter @Setter @Builder @ToString
+@Data
+@Builder
 public class IncidenteDTO {
     private Integer idIncidente;
     private Date fechaCreacion;

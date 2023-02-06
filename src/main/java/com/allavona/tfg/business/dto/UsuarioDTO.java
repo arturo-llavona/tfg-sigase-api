@@ -1,10 +1,12 @@
 package com.allavona.tfg.business.dto;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter @Builder
+@Data
+@Builder
 public class UsuarioDTO {
     private Integer idUsuario;
     private String nombre;
