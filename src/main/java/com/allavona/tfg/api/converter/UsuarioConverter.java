@@ -7,9 +7,9 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UsuarioDtoConverter implements Converter<Usuario, UsuarioDTO> {
-    public UsuarioDTO convert(final Usuario source) {
-        final UsuarioDTO target = UsuarioDTO.builder().build();
+public class UsuarioConverter implements Converter<UsuarioDTO, Usuario> {
+    public Usuario convert(final UsuarioDTO source ) {
+        final Usuario target = Usuario.builder().build();
         BeanUtils.copyProperties(source, target);
         return target;
     }

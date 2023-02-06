@@ -8,7 +8,8 @@ import java.util.Date;
 
 @Entity
 @Table(name = "incidente", schema = "public", catalog = "tfg")
-@Getter @Setter @EqualsAndHashCode @ToString
+@NoArgsConstructor
+@Data
 public class IncidenteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

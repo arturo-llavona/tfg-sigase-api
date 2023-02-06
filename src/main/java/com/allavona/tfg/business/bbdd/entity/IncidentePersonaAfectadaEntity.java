@@ -1,15 +1,14 @@
 package com.allavona.tfg.business.bbdd.entity;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Date;
 
 @Entity
 @Table(name = "incidente_persona_afectada", schema = "public", catalog = "tfg")
-@Getter @Setter @EqualsAndHashCode
+@NoArgsConstructor
+@Data
 public class IncidentePersonaAfectadaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

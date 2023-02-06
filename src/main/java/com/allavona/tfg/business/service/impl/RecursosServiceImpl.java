@@ -16,11 +16,13 @@ import java.util.List;
 
 @Service
 public class RecursosServiceImpl implements RecursosService {
-    @Autowired
-    private RecursoRepository recursoRepository;
+    private final RecursoRepository recursoRepository;
+    private final TipoRecursoRepository tipoRecursoRepository;
 
-    @Autowired
-    private TipoRecursoRepository tipoRecursoRepository;
+    public RecursosServiceImpl(RecursoRepository recursoRepository, TipoRecursoRepository tipoRecursoRepository) {
+        this.recursoRepository = recursoRepository;
+        this.tipoRecursoRepository = tipoRecursoRepository;
+    }
 
     private RecursoEntityConverter recursoEntityConverter = new RecursoEntityConverter();
 

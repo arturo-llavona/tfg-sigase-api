@@ -13,10 +13,13 @@ import java.util.Optional;
 
 @Service
 public class UsuariosServiceImpl implements UsuariosService {
-    @Autowired
-    private UsuarioRepository repository;
+    private final UsuarioRepository repository;
 
     private UsuarioEntityConverter converter = new UsuarioEntityConverter();
+
+    public UsuariosServiceImpl(UsuarioRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public UsuarioDTO autenticar(UsuarioDTO usuario) {

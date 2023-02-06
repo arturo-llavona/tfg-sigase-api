@@ -21,32 +21,35 @@ import java.util.Optional;
 
 @Service
 public class IncidentesServiceImpl implements IncidentesService {
-    @Autowired
-    private IncidenteRepository incidenteRepository;
-    @Autowired
-    private ObservacionRepository observacionRepository;
-    @Autowired
-    private IncidentePersonaAfectadaRepository incidentePersonaAfectadaRepository;
-    @Autowired
-    private IncidenteRecursoRepository incidenteRecursoRepository;
-    @Autowired
-    private RecursoRepository recursoRepository;
-    @Autowired
-    private IncidenteRecursoEstadoRepository incidenteRecursoEstadoRepository;
-    @Autowired
-    private RecursoEstadoRepository recursoEstadoRepository;
-    @Autowired
-    private PlantillaClasificacionIncidenteRepository plantillaClasificacionIncidenteRepository;
-    @Autowired
-    private TipoRecursoRepository tipoRecursoRepository;
-    @Autowired
-    private ClasificacionIncidenteRepository clasificacionIncidenteRepository;
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final IncidenteRepository incidenteRepository;
+    private final ObservacionRepository observacionRepository;
+    private final IncidentePersonaAfectadaRepository incidentePersonaAfectadaRepository;
+    private final IncidenteRecursoRepository incidenteRecursoRepository;
+    private final RecursoRepository recursoRepository;
+    private final IncidenteRecursoEstadoRepository incidenteRecursoEstadoRepository;
+    private final RecursoEstadoRepository recursoEstadoRepository;
+    private final PlantillaClasificacionIncidenteRepository plantillaClasificacionIncidenteRepository;
+    private final TipoRecursoRepository tipoRecursoRepository;
+    private final ClasificacionIncidenteRepository clasificacionIncidenteRepository;
+    private final UsuarioRepository usuarioRepository;
 
     private ClasificacionIncidenteEntityConverter clasificacionIncidenteEntityConverter = new ClasificacionIncidenteEntityConverter();
 
     private IncidenteEntityConverter incidenteEntityConverter = new IncidenteEntityConverter();
+
+    public IncidentesServiceImpl(IncidenteRecursoRepository incidenteRecursoRepository, IncidenteRepository incidenteRepository, ObservacionRepository observacionRepository, IncidentePersonaAfectadaRepository incidentePersonaAfectadaRepository, RecursoRepository recursoRepository, IncidenteRecursoEstadoRepository incidenteRecursoEstadoRepository, RecursoEstadoRepository recursoEstadoRepository, PlantillaClasificacionIncidenteRepository plantillaClasificacionIncidenteRepository, TipoRecursoRepository tipoRecursoRepository, ClasificacionIncidenteRepository clasificacionIncidenteRepository, UsuarioRepository usuarioRepository) {
+        this.incidenteRecursoRepository = incidenteRecursoRepository;
+        this.incidenteRepository = incidenteRepository;
+        this.observacionRepository = observacionRepository;
+        this.incidentePersonaAfectadaRepository = incidentePersonaAfectadaRepository;
+        this.recursoRepository = recursoRepository;
+        this.incidenteRecursoEstadoRepository = incidenteRecursoEstadoRepository;
+        this.recursoEstadoRepository = recursoEstadoRepository;
+        this.plantillaClasificacionIncidenteRepository = plantillaClasificacionIncidenteRepository;
+        this.tipoRecursoRepository = tipoRecursoRepository;
+        this.clasificacionIncidenteRepository = clasificacionIncidenteRepository;
+        this.usuarioRepository = usuarioRepository;
+    }
 
     @Override
     public List<ClasificacionIncidenteDTO> findClasificacionIncidenteByCodigo(final String codigo) {

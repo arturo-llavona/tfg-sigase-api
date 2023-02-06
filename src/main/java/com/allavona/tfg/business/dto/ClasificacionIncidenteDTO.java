@@ -1,11 +1,8 @@
 package com.allavona.tfg.business.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-@Getter @Setter @ToString @Builder
+@Data @Builder
 public class ClasificacionIncidenteDTO {
     private Integer idClasificacionIncidente;
     private String codigo;
