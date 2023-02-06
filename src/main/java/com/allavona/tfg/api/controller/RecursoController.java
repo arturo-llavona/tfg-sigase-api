@@ -1,10 +1,15 @@
 package com.allavona.tfg.api.controller;
 
 import com.allavona.tfg.api.RecursosAPI;
-import com.allavona.tfg.api.converter.RecursoDtoConverter;
+import com.allavona.tfg.api.converter.RecursoConverter;
 import com.allavona.tfg.api.utils.URLConstants;
+import com.allavona.tfg.api.vo.ClasificacionIncidente;
+import com.allavona.tfg.api.vo.Recurso;
+import com.allavona.tfg.business.dto.RecursoDTO;
 import com.allavona.tfg.business.service.RecursosService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.allavona.tfg.business.service.UsuariosService;
+import org.springframework.core.convert.TypeDescriptor;
+import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,27 +18,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping(path= URLConstants.RESOURCES_V1_URL, produces= MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins="*")
-public class RecursoController implements RecursosAPI {
+public class RecursoController extends BaseController implements RecursosAPI {
     private final RecursosService recursosService;
-    private RecursoDtoConverter recursoDtoConverter = new RecursoDtoConverter();
 
-    public RecursoController(RecursosService recursosService) {
+    public RecursoController(RecursosService recursosService, GenericConversionService genericConversionService, UsuariosService usuariosService) {
+        super(usuariosService, genericConversionService);
         this.recursosService = recursosService;
     }
 
     @Override
     @RequestMapping( produces = {MediaType.APPLICATION_JSON_VALUE }, method = RequestMethod.GET)
     public ResponseEntity listar() {
+        List<RecursoDTO> source = recursosService.findAll();
+        List<Recurso> target = (List<Recurso>) this.genericConversionService.convert(source, TypeDescriptor.forObject(source), TypeDescriptor.collection(List.class, TypeDescriptor.valueOf(Recurso.class)));
         return Optional
-                .of(recursosService.findAll()
-                        .stream()
-                        .map(recursoDTO -> recursoDtoConverter.convert(recursoDTO)).toList())
-                .map(ResponseEntity::ok)
+                .of(target).map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 }

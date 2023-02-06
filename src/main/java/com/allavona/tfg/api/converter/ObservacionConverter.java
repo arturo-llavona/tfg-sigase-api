@@ -8,18 +8,18 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ObservacionDtoConverter implements Converter<Observacion, ObservacionDTO> {
-    private final UsuarioDtoConverter usuarioDtoConverter;
+public class ObservacionConverter implements Converter<ObservacionDTO, Observacion> {
+    private final UsuarioConverter usuarioConverter;
 
-    public ObservacionDtoConverter(UsuarioDtoConverter usuarioDtoConverter) {
-        this.usuarioDtoConverter = usuarioDtoConverter;
+    public ObservacionConverter(UsuarioConverter usuarioConverter) {
+        this.usuarioConverter = usuarioConverter;
     }
 
-    public ObservacionDTO convert(final Observacion source ) {
-        final ObservacionDTO target = ObservacionDTO.builder().build();
+    public Observacion convert(final ObservacionDTO source ) {
+        final Observacion target = Observacion.builder().build();
         BeanUtils.copyProperties(source, target);
         if ( source.getUsuario() != null ) {
-            target.setUsuario(usuarioDtoConverter.convert(source.getUsuario()));
+            target.setUsuario(usuarioConverter.convert(source.getUsuario()));
         }
         return target;
     }

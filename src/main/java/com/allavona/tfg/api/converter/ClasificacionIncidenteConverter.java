@@ -7,9 +7,9 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ClasificacionIncidenteDtoConverter implements Converter<ClasificacionIncidente, ClasificacionIncidenteDTO> {
-    public ClasificacionIncidenteDTO convert(final ClasificacionIncidente source ) {
-        final ClasificacionIncidenteDTO target = ClasificacionIncidenteDTO.builder().build();
+public class ClasificacionIncidenteConverter implements Converter<ClasificacionIncidenteDTO, ClasificacionIncidente> {
+    public ClasificacionIncidente convert(final ClasificacionIncidenteDTO source ) {
+        final ClasificacionIncidente target = ClasificacionIncidente.builder().build();
         BeanUtils.copyProperties(source, target);
         return target;
     }

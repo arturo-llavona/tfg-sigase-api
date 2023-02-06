@@ -27,8 +27,8 @@ public class Incidente implements Serializable {
     private String localizacionLongitud;
     private String localizacionLatitud;
     private List<Observacion> observaciones;
-    private IncidentePersonaAfectadaDTO personaAfectada;
-    private List<TipoRecursoDTO> plantillaRecursos;
-    private List<RecursoDTO> recursos;
+    private IncidentePersonaAfectada personaAfectada;
+    private List<TipoRecurso> plantillaRecursos;
+    private List<Recurso> recursos;
     private ClasificacionIncidente clasificacionIncidente;
 }

@@ -1,14 +1,16 @@
 package com.allavona.tfg.api.controller;
 
 import com.allavona.tfg.api.IncidentesAPI;
-import com.allavona.tfg.api.converter.ClasificacionIncidenteDtoConverter;
-import com.allavona.tfg.api.converter.TipoRecursoDtoConverter;
 import com.allavona.tfg.api.utils.SecurityUtils;
 import com.allavona.tfg.api.utils.URLConstants;
+import com.allavona.tfg.api.vo.ClasificacionIncidente;
 import com.allavona.tfg.api.vo.Incidente;
 import com.allavona.tfg.api.vo.TipoRecurso;
 import com.allavona.tfg.api.vo.Usuario;
+import com.allavona.tfg.business.dto.ClasificacionIncidenteDTO;
 import com.allavona.tfg.business.dto.IncidenteDTO;
+import com.allavona.tfg.business.dto.TipoRecursoDTO;
+import com.allavona.tfg.business.dto.UsuarioDTO;
 import com.allavona.tfg.business.service.IncidentesService;
 import com.allavona.tfg.business.service.RecursosService;
 import com.allavona.tfg.business.service.UsuariosService;
@@ -38,17 +40,12 @@ import static com.allavona.tfg.api.utils.Constants.ID_USUARIO_HEADER_DESCRIPTION
 public class IncidentesController extends BaseController implements IncidentesAPI {
     private final IncidentesService incidentesService;
     private final RecursosService recursosService;
-    private final GenericConversionService genericConversionService;
-    private ClasificacionIncidenteDtoConverter clasificacionIncidenteDtoConverter = new ClasificacionIncidenteDtoConverter();
-    private TipoRecursoDtoConverter tipoRecursoDtoConverter = new TipoRecursoDtoConverter();
-
     private static Logger logger = LogManager.getLogger();
 
     public IncidentesController(IncidentesService incidentesService, RecursosService recursosService, GenericConversionService genericConversionService, UsuariosService usuariosService) {
-        super(usuariosService);
+        super(usuariosService, genericConversionService);
         this.incidentesService = incidentesService;
-        this.recursosService = recursosService;
-        this.genericConversionService = genericConversionService;
+        this.recursosService = recursosService;;
     }
 
     @Override
@@ -73,7 +70,6 @@ public class IncidentesController extends BaseController implements IncidentesAP
             }
 
             List<Incidente> target = (List<Incidente>) this.genericConversionService.convert(source, TypeDescriptor.forObject(source), TypeDescriptor.collection(List. class, TypeDescriptor.valueOf(Incidente.class)));
-
             respuesta = Optional.ofNullable(SecurityUtils.filtrarObservacionesConDatosMedicos(target, usuario)).map(ResponseEntity::ok)
                     .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
             logger.info("Incidentes recuperados correctmente por el usuario " + idUsuario);
@@ -124,7 +120,7 @@ public class IncidentesController extends BaseController implements IncidentesAP
             SecurityUtils.checkIsUsuarioConPerfilConsulta(usuario);
             logger.info("Se va a proceder a insertar en base de datos el un incidente.");
             logger.debug(incidente.toString());
-            IncidenteDTO incidenteCreado = incidentesService.crearIncidente(usuarioDtoConverter.convert(usuario), genericConversionService.convert(incidente, IncidenteDTO.class));
+            IncidenteDTO incidenteCreado = incidentesService.crearIncidente(genericConversionService.convert(usuario, UsuarioDTO.class), genericConversionService.convert(incidente, IncidenteDTO.class));
             logger.info("Se ha creado el incidente correctamente.");
             logger.debug(incidenteCreado.toString());
             URI location = URI.create(String.format(URLConstants.INCIDENTS_V1_URL + "/%d", incidenteCreado.getIdIncidente()));
@@ -144,10 +140,10 @@ public class IncidentesController extends BaseController implements IncidentesAP
     ) {
         ResponseEntity respuesta = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         try {
+            List<ClasificacionIncidenteDTO> source = incidentesService.findClasificacionIncidenteByCodigo(codigo);
+            List<ClasificacionIncidente> target = (List<ClasificacionIncidente>) this.genericConversionService.convert(source, TypeDescriptor.forObject(source), TypeDescriptor.collection(List. class, TypeDescriptor.valueOf(ClasificacionIncidente.class)));
             respuesta = Optional
-                    .ofNullable(incidentesService.findClasificacionIncidenteByCodigo(codigo)
-                            .stream()
-                            .map(clasificacionIncidenteDTO -> clasificacionIncidenteDtoConverter.convert(clasificacionIncidenteDTO)).toList())
+                    .ofNullable(target)
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
         } catch (Exception e) {
@@ -163,9 +159,9 @@ public class IncidentesController extends BaseController implements IncidentesAP
             @PathVariable(name="id", required = true) final Integer id) {
         ResponseEntity<List<TipoRecurso>> respuesta = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         try {
-            respuesta = Optional.ofNullable(recursosService.listResourcesByIncidentClassification(id)
-                            .stream()
-                            .map(tipoRecursoDTO -> tipoRecursoDtoConverter.convert(tipoRecursoDTO)).toList())
+            List<TipoRecursoDTO> source = recursosService.listResourcesByIncidentClassification(id);
+            List<TipoRecurso> target = (List<TipoRecurso>) this.genericConversionService.convert(source, TypeDescriptor.forObject(source), TypeDescriptor.collection(List. class, TypeDescriptor.valueOf(TipoRecurso.class)));
+            respuesta = Optional.ofNullable(target)
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 
