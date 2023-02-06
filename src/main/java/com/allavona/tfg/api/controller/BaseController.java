@@ -10,9 +10,13 @@ import java.util.Optional;
 
 @RestController
 public class BaseController {
-    @Autowired
-    public UsuariosService usuariosService;
+    public final UsuariosService usuariosService;
     public UsuarioDtoConverter usuarioDtoConverter = new UsuarioDtoConverter();
+
+    public BaseController(UsuariosService usuariosService) {
+        this.usuariosService = usuariosService;
+    }
+
     public Usuario getUsuarioById(Integer idUsuario) {
         return Optional.ofNullable(usuariosService.getUsuarioById(idUsuario)).map(t -> usuarioDtoConverter.convert(t)).orElse(null);
     }

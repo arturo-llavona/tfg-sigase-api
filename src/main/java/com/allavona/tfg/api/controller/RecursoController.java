@@ -19,9 +19,13 @@ import java.util.Optional;
 @RequestMapping(path= URLConstants.RESOURCES_V1_URL, produces= MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins="*")
 public class RecursoController implements RecursosAPI {
-    @Autowired
-    private RecursosService recursosService;
+    private final RecursosService recursosService;
     private RecursoDtoConverter recursoDtoConverter = new RecursoDtoConverter();
+
+    public RecursoController(RecursosService recursosService) {
+        this.recursosService = recursosService;
+    }
+
     @Override
     @RequestMapping( produces = {MediaType.APPLICATION_JSON_VALUE }, method = RequestMethod.GET)
     public ResponseEntity listar() {

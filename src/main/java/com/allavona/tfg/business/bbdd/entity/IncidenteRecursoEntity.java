@@ -1,15 +1,12 @@
 package com.allavona.tfg.business.bbdd.entity;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "incidente_recurso", schema = "public", catalog = "tfg")
-@Setter
-@Getter
-@EqualsAndHashCode
+@NoArgsConstructor
+@Data
 public class IncidenteRecursoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
