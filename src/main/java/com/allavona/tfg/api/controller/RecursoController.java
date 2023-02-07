@@ -31,7 +31,7 @@ public class RecursoController extends BaseController implements RecursosAPI {
 
     @Override
     @RequestMapping( produces = {MediaType.APPLICATION_JSON_VALUE }, method = RequestMethod.GET)
-    public ResponseEntity listar(
+    public  ResponseEntity<List<Recurso>> listar(
             @RequestParam(value="type", required = false) final Integer idTipoRecurso,
             @RequestParam(value = "onlyAvailable", required = false, defaultValue = "true") final Boolean onlyAvailable) {
         List<RecursoDTO> source = onlyAvailable ? recursosService.findRecursosDisponibles(idTipoRecurso) : recursosService.findAll(idTipoRecurso);

@@ -110,7 +110,7 @@ public class IncidentesController extends BaseController implements IncidentesAP
     }
     @Override
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity crearIncidente(
+    public ResponseEntity<Incidente> crearIncidente(
             @Parameter(description = ID_USUARIO_HEADER_DESCRIPTION, required=true )
             @RequestHeader(value = ID_USUARIO_HEADER, required = true) final Integer idUsuario,
             @RequestBody final Incidente incidente) {
@@ -133,7 +133,7 @@ public class IncidentesController extends BaseController implements IncidentesAP
     }
     @Override
     @RequestMapping(path = URLConstants.CLASSIFICATIONS_URL, produces = {MediaType.APPLICATION_JSON_VALUE }, method = RequestMethod.GET)
-    public ResponseEntity buscarClasificacionIncidente(
+    public ResponseEntity<List<ClasificacionIncidente>> buscarClasificacionIncidente(
             @Parameter(description = "Inicio del código que se está buscando.", required = false,
                     schema = @Schema(type = "string"))
             @RequestParam(value = "codigo", required = false) final String codigo
