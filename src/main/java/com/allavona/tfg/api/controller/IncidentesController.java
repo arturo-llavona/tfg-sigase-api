@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static com.allavona.tfg.api.utils.Constants.ID_USUARIO_HEADER;
-import static com.allavona.tfg.api.utils.Constants.ID_USUARIO_HEADER_DESCRIPTION;
+import static com.allavona.tfg.api.utils.Constants.USERNAME_HEADER;
+import static com.allavona.tfg.api.utils.Constants.USERNAME_HEADER_DESCRIPTION;
 
 @RestController
 @RequestMapping(path= URLConstants.INCIDENTS_V1_URL, produces= MediaType.APPLICATION_JSON_VALUE)
@@ -51,15 +51,15 @@ public class IncidentesController extends BaseController implements IncidentesAP
     @Override
     @RequestMapping(produces = { MediaType.APPLICATION_JSON_VALUE } , method = RequestMethod.GET)
     public ResponseEntity<List<Incidente>> buscarIncidentes(
-            @Parameter(description = ID_USUARIO_HEADER_DESCRIPTION, required=true)
-            @RequestHeader(value = ID_USUARIO_HEADER, required = true) final Integer idUsuario,
+            @Parameter(description = USERNAME_HEADER_DESCRIPTION, required=true)
+            @RequestHeader(value = USERNAME_HEADER, required = true) final String username,
             @Parameter(description = "Parámetro que indica si el incidente ya ha sido finalizado.", required = false, schema = @Schema(type = "boolean"))
             @RequestParam(value = "closed", required = false, defaultValue = "false") final boolean closed) {
 
         ResponseEntity<List<Incidente>> respuesta = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
         try {
-            Usuario usuario = getUsuarioById(idUsuario);
+            Usuario usuario = getUsuarioByUsername(username);
             SecurityUtils.checkIsUsuarioConPerfilConsulta(usuario);
 
             List<IncidenteDTO> source;
@@ -72,7 +72,7 @@ public class IncidentesController extends BaseController implements IncidentesAP
             List<Incidente> target = (List<Incidente>) this.genericConversionService.convert(source, TypeDescriptor.forObject(source), TypeDescriptor.collection(List. class, TypeDescriptor.valueOf(Incidente.class)));
             respuesta = Optional.ofNullable(SecurityUtils.filtrarObservacionesConDatosMedicos(target, usuario)).map(ResponseEntity::ok)
                     .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-            logger.info("Incidentes recuperados correctmente por el usuario " + idUsuario);
+            logger.info("Incidentes recuperados correctmente por el usuario " + username);
         } catch (ResponseStatusException e) {
             logger.warn("Un usuario ha intentado acceder a un recurso al que no tenía permiso.", e.getMessage());
         } catch (Exception e) {
@@ -84,13 +84,13 @@ public class IncidentesController extends BaseController implements IncidentesAP
     @Override
     @RequestMapping(path = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE } , method = RequestMethod.GET)
     public ResponseEntity<Incidente> obtenerIncidente(
-            @Parameter(description = ID_USUARIO_HEADER_DESCRIPTION, required=true )
-            @RequestHeader(value = ID_USUARIO_HEADER, required = true) final Integer idUsuario,
+            @Parameter(description = USERNAME_HEADER_DESCRIPTION, required=true )
+            @RequestHeader(value = USERNAME_HEADER, required = true) final String username,
             @Parameter(description = "Identificador del incidente.", required = true)
             @PathVariable(name="id", required = true) final Integer idIncidente) {
         ResponseEntity<Incidente> respuesta = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         try {
-            Usuario usuario = getUsuarioById(idUsuario);
+            Usuario usuario = getUsuarioByUsername(username);
             SecurityUtils.checkIsUsuarioConPerfilConsulta(usuario);
 
             Incidente incidente = Optional.ofNullable(incidentesService.findIncidenteById(idIncidente)).map(i -> genericConversionService.convert(i, Incidente.class)).get();
@@ -111,12 +111,12 @@ public class IncidentesController extends BaseController implements IncidentesAP
     @Override
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Incidente> crearIncidente(
-            @Parameter(description = ID_USUARIO_HEADER_DESCRIPTION, required=true )
-            @RequestHeader(value = ID_USUARIO_HEADER, required = true) final Integer idUsuario,
+            @Parameter(description = USERNAME_HEADER_DESCRIPTION, required=true )
+            @RequestHeader(value = USERNAME_HEADER, required = true) final String username,
             @RequestBody final Incidente incidente) {
         ResponseEntity<Incidente> respuesta = ResponseEntity.badRequest().build();
         try {
-            Usuario usuario = getUsuarioById(idUsuario);
+            Usuario usuario = getUsuarioByUsername(username);
             SecurityUtils.checkIsUsuarioConPerfilConsulta(usuario);
             logger.info("Se va a proceder a insertar en base de datos el un incidente.");
             logger.debug(incidente.toString());

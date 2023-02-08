@@ -1,11 +1,8 @@
 package com.allavona.tfg.api.controller;
 
-import com.allavona.tfg.api.converter.UsuarioDtoConverter;
 import com.allavona.tfg.api.vo.Usuario;
 import com.allavona.tfg.business.dto.UsuarioDTO;
 import com.allavona.tfg.business.service.UsuariosService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,8 +18,8 @@ public class BaseController {
         this.genericConversionService = genericConversionService;
     }
 
-    public Usuario getUsuarioById(Integer idUsuario) {
-        UsuarioDTO source = usuariosService.getUsuarioById(idUsuario);
+    public Usuario getUsuarioByUsername(String username) {
+        UsuarioDTO source = usuariosService.getUsuarioByUsername(username);
         Usuario target = genericConversionService.convert(source, Usuario.class);
         return Optional.ofNullable(target).orElse(null);
     }

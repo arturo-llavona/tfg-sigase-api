@@ -32,8 +32,9 @@ public class UsuariosServiceImpl implements UsuariosService {
     }
 
     @Override
-    public UsuarioDTO getUsuarioById(Integer idUsuario) {
-        return repository.findById(idUsuario).map(t -> {
+    public UsuarioDTO getUsuarioByUsername(String username) {
+        UsuarioEntity usuarioEntity = repository.findByUsername(username);
+        return Optional.ofNullable(usuarioEntity).map(t -> {
             UsuarioDTO usuario = converter.convert(t);
             usuario.setPassword(null);
             return usuario;
