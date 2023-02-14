@@ -10,9 +10,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class RecursoConverter implements Converter<RecursoDTO, Recurso>  {
     private final TipoRecursoConverter tipoRecursoConverter;
-
-    public RecursoConverter(TipoRecursoConverter tipoRecursoConverter) {
+    private final EstadoRecursoConverter estadoRecursoConverter;
+    public RecursoConverter(TipoRecursoConverter tipoRecursoConverter, EstadoRecursoConverter estadoRecursoConverter) {
         this.tipoRecursoConverter = tipoRecursoConverter;
+        this.estadoRecursoConverter = estadoRecursoConverter;
     }
 
     public Recurso convert(final RecursoDTO source ) {
@@ -20,6 +21,9 @@ public class RecursoConverter implements Converter<RecursoDTO, Recurso>  {
         BeanUtils.copyProperties(source, target);
         if ( source.getTipoRecurso() != null ) {
             target.setTipoRecurso(tipoRecursoConverter.convert(source.getTipoRecurso()));
+        }
+        if ( source.getEstado() != null ) {
+            target.setEstado(estadoRecursoConverter.convert(source.getEstado()));
         }
         return target;
     }
