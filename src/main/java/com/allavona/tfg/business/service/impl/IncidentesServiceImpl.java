@@ -2,6 +2,7 @@ package com.allavona.tfg.business.service.impl;
 
 import com.allavona.tfg.api.enums.TipoUsuarioEnum;
 import com.allavona.tfg.api.vo.Incidente;
+import com.allavona.tfg.api.vo.IncidentePersonaAfectada;
 import com.allavona.tfg.api.vo.Observacion;
 import com.allavona.tfg.business.bbdd.entity.ClasificacionIncidenteEntity;
 import com.allavona.tfg.business.bbdd.entity.IncidenteEntity;
@@ -10,6 +11,7 @@ import com.allavona.tfg.business.bbdd.entity.ObservacionEntity;
 import com.allavona.tfg.business.bbdd.repository.*;
 import com.allavona.tfg.business.converter.ClasificacionIncidenteEntityConverter;
 import com.allavona.tfg.business.converter.IncidenteEntityConverter;
+import com.allavona.tfg.business.converter.IncidentePersonaAfectadaEntityConverter;
 import com.allavona.tfg.business.dto.*;
 import com.allavona.tfg.business.service.IncidentesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,8 @@ public class IncidentesServiceImpl implements IncidentesService {
     private ClasificacionIncidenteEntityConverter clasificacionIncidenteEntityConverter = new ClasificacionIncidenteEntityConverter();
 
     private IncidenteEntityConverter incidenteEntityConverter = new IncidenteEntityConverter();
+
+    private IncidentePersonaAfectadaEntityConverter incidentePersonaAfectadaEntityConverter = new IncidentePersonaAfectadaEntityConverter();
 
     public IncidentesServiceImpl(IncidenteRecursoRepository incidenteRecursoRepository, IncidenteRepository incidenteRepository, ObservacionRepository observacionRepository, IncidentePersonaAfectadaRepository incidentePersonaAfectadaRepository, RecursoRepository recursoRepository, IncidenteRecursoEstadoRepository incidenteRecursoEstadoRepository, RecursoEstadoRepository recursoEstadoRepository, PlantillaClasificacionIncidenteRepository plantillaClasificacionIncidenteRepository, TipoRecursoRepository tipoRecursoRepository, ClasificacionIncidenteRepository clasificacionIncidenteRepository, UsuarioRepository usuarioRepository) {
         this.incidenteRecursoRepository = incidenteRecursoRepository;
@@ -82,6 +86,13 @@ public class IncidentesServiceImpl implements IncidentesService {
         nuevoIncidente.setFechaCreacion(new Date());
         nuevoIncidente.setClasificacionIncidente(clasificacionIncidenteEntityConverter.convert(incidente.getClasificacionIncidente()));
         nuevoIncidente = incidenteRepository.save(nuevoIncidente);
+
+        IncidentePersonaAfectadaDTO personaAfectadaDTO = incidente.getPersonaAfectada();
+        if ( personaAfectadaDTO != null ) {
+            IncidentePersonaAfectadaEntity personaAfectadaEntity = incidentePersonaAfectadaEntityConverter.convert(personaAfectadaDTO);
+            personaAfectadaEntity.setIdIncidente(nuevoIncidente.getIdIncidente());
+            incidentePersonaAfectadaRepository.save(personaAfectadaEntity);
+        }
 
         List<ObservacionDTO> observaciones = incidente.getObservaciones();
         if ( observaciones != null && observaciones.size() > 0 ) {
