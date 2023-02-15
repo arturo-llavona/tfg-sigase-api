@@ -57,7 +57,7 @@ public class IncidentesServiceImpl implements IncidentesService {
 
     @Override
     public List<ClasificacionIncidenteDTO> findClasificacionIncidenteByCodigo(final String codigo) {
-        List<ClasificacionIncidenteEntity> source =  clasificacionIncidenteRepository.findByCodigoStartingWith(codigo);
+        List<ClasificacionIncidenteEntity> source =  codigo != null ? clasificacionIncidenteRepository.findByCodigoStartingWith(codigo) : clasificacionIncidenteRepository.findAll();
         List<ClasificacionIncidenteDTO> target = source.stream().map(recurso -> clasificacionIncidenteEntityConverter.convert(recurso)).toList();
         return target;
     }
