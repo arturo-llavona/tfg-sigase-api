@@ -13,6 +13,5 @@ public class Recurso implements Serializable {
     private TipoRecurso tipoRecurso;
     private EstadoRecurso estado;
     private String nombre;
-    private boolean esConsultaSanitaria;
     private boolean habilitado;
 }
