@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UsuarioEntityConverter {
+    // Método que realiza la transformación de un objeto de tipo Entity a tipo DTO, basado en la funcionalidad
+    // copyProperties de BeanUtils.
     public UsuarioDTO convert(final UsuarioEntity source) {
         final UsuarioDTO target = UsuarioDTO.builder().build();
         BeanUtils.copyProperties(source, target);

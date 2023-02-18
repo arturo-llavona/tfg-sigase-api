@@ -22,7 +22,7 @@ import java.util.List;
             @ApiResponse(responseCode = "200", description = "Consulta finalizada con éxito", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidente.class)))),
             @ApiResponse(responseCode = "401", description = "Acceso no autorizado", content = @Content(schema = @Schema(implementation = Void.class)))
     })
-    ResponseEntity<List<Incidente>> buscarIncidentes(final Integer idUsuario, final boolean closed);
+    ResponseEntity<List<Incidente>> buscarIncidentes(final String username, final boolean closed);
 
     @Operation(summary = "Obtiene el detalle de un incidente",
             description = "Este servicio permite consultar el detalle completo de un incidente.",
@@ -31,14 +31,14 @@ import java.util.List;
             @ApiResponse(responseCode = "200", description = "Consulta finalizada con éxito", content = @Content(schema = @Schema(implementation = Incidente.class))),
             @ApiResponse(responseCode = "401", description = "Acceso no autorizado", content = @Content(schema = @Schema(implementation = Void.class)))
     })
-    ResponseEntity<Incidente> obtenerIncidente(final Integer idUsuario, final Integer idIncidente);
+    ResponseEntity<Incidente> obtenerIncidente(final String username, final Integer idIncidente);
 
     @Operation(summary = "Crea un nuevo incidente", description = "Este servicio permite crear un nuevo incidente.", tags = { "Incidents"})
     @ApiResponses( value = {
             @ApiResponse(responseCode = "201", description = "Incidente creado con éxito", content = @Content(schema = @Schema(implementation = Void.class))),
             @ApiResponse(responseCode = "401", description  = "Acceso no autorizado", content = @Content(schema = @Schema(implementation = Void.class)))
     })
-    ResponseEntity<Incidente> crearIncidente(final Integer idUsuario, final Incidente incidente);
+    ResponseEntity<Incidente> crearIncidente(final String username, final Incidente incidente);
 
     @Operation(summary="Busca la clasificación incidente",
             description="Este servicio permite realizar una búsqueda de las clasificaciones de los incidentes a partir del comienzo de su código.",

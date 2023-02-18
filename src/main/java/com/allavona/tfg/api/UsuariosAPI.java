@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
-
 @Tag(description = "API de Usuarios", name = "Users")
     public interface UsuariosAPI {
     @Operation(summary="Verificación de credenciales",
@@ -21,5 +20,4 @@ import org.springframework.http.ResponseEntity;
             @ApiResponse(responseCode = "401", description = "Credenciales incorrectas", content = @Content(schema = @Schema(implementation = Void.class)))
     })
     ResponseEntity<Usuario> autenticar(final Login login);
-
 }

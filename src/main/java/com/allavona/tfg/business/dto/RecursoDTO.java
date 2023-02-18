@@ -8,7 +8,6 @@ public class RecursoDTO {
     private Integer idRecurso;
     private TipoRecursoDTO tipoRecurso;
     private String nombre;
-    private boolean esConsultaSanitaria;
     private boolean habilitado;
     private EstadoRecursoDTO estado;
 

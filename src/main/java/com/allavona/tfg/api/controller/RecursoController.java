@@ -23,21 +23,22 @@ import java.util.Optional;
 @CrossOrigin(origins="*")
 public class RecursoController extends BaseController implements RecursosAPI {
     private final RecursosService recursosService;
-
     public RecursoController(RecursosService recursosService, GenericConversionService genericConversionService, UsuariosService usuariosService) {
         super(usuariosService, genericConversionService);
         this.recursosService = recursosService;
     }
-
     @Override
     @RequestMapping( produces = {MediaType.APPLICATION_JSON_VALUE }, method = RequestMethod.GET)
     public  ResponseEntity<List<Recurso>> listar(
             @RequestParam(value="type", required = false) final Integer idTipoRecurso,
             @RequestParam(value = "onlyAvailable", required = false, defaultValue = "true") final Boolean onlyAvailable) {
+        // Realiza la consulta a la capa de servicios de los recursos deseados.
         List<RecursoDTO> source = onlyAvailable ? recursosService.findRecursosDisponibles(idTipoRecurso) : recursosService.findAll(idTipoRecurso);
+        // Se realiza la conversión de los objetos de DTO a VO.
         List<Recurso> target = (List<Recurso>) this.genericConversionService.convert(source, TypeDescriptor.forObject(source), TypeDescriptor.collection(List.class, TypeDescriptor.valueOf(Recurso.class)));
+        // Se responde con un OK (200) en caso de haber encontrado resultados, o con un NOT_FOUND (404) en caso contrario.
         return Optional
                 .of(target).map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }
