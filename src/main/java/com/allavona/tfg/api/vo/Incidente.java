@@ -1,14 +1,10 @@
 package com.allavona.tfg.api.vo;
 
-import com.allavona.tfg.business.dto.IncidentePersonaAfectadaDTO;
-import com.allavona.tfg.business.dto.RecursoDTO;
-import com.allavona.tfg.business.dto.TipoRecursoDTO;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 

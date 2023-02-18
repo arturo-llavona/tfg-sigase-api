@@ -12,10 +12,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-
 @Tag(description = "API de Recursos", name = "Resources")
     public interface RecursosAPI {
-
     @Operation(summary="Lista todos los recursos",
             description="Este servicio lista todos los recursos del sistema",
             tags = {"Resources"})

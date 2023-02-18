@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TipoRecursoEntityConverter {
+    // Método que realiza la transformación de un objeto de tipo Entity a tipo DTO, basado en la funcionalidad
+    // copyProperties de BeanUtils.
     public TipoRecursoDTO convert(final TipoRecursoEntity source ) {
         final TipoRecursoDTO target = TipoRecursoDTO.builder().build();
         BeanUtils.copyProperties(source, target);

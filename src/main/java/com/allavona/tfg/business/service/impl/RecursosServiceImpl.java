@@ -17,33 +17,38 @@ import java.util.List;
 public class RecursosServiceImpl implements RecursosService {
     private final RecursoRepository recursoRepository;
     private final TipoRecursoRepository tipoRecursoRepository;
-
+    private RecursoEntityConverter recursoEntityConverter = new RecursoEntityConverter();
+    private TipoRecursoEntityConverter tipoRecursoEntityConverter = new TipoRecursoEntityConverter();
     public RecursosServiceImpl(RecursoRepository recursoRepository, TipoRecursoRepository tipoRecursoRepository) {
         this.recursoRepository = recursoRepository;
         this.tipoRecursoRepository = tipoRecursoRepository;
     }
-
-    private RecursoEntityConverter recursoEntityConverter = new RecursoEntityConverter();
-
-    private TipoRecursoEntityConverter tipoRecursoEntityConverter = new TipoRecursoEntityConverter();
-
     @Override
     public List<RecursoDTO> findAll(final Integer idTipoRecurso) {
+        // Se realiza una consulta a la base de datos, dependiendo de si nos llega indicado un idTipoRecurso en el parámetro
+        // o no. En caso de llegar, se realiza una búsqueda de todos los recursos habilitados del tipo de recurso indicado,
+        // en caso contrario, se realiza una búsqueda de todos los recursos habilitados, independientemente del tipo.
         List<RecursoEntity> source =  idTipoRecurso != null ? recursoRepository.findRecursosHabilitados(idTipoRecurso) : recursoRepository.findRecursosHabilitados();
+        // Después, realizamos la transformación del listado de Entity a DTO utilizando su converter.
         List<RecursoDTO> recursos = source.stream().map(recurso -> recursoEntityConverter.convert(recurso)).toList();
         return recursos;
     }
-
     @Override
     public List<RecursoDTO> findRecursosDisponibles(final Integer idTipoRecurso) {
+        // Se realiza una consulta a la base de datos, dependiendo de si nos llega indicado un idTipoRecurso en el parámetro
+        // o no. En caso de llegar, se realiza una búsqueda de todos los recursos disponibles del tipo de recurso indicado,
+        // en caso contrario, se realiza una búsqueda de todos los recursos disponibles, independientemente del tipo.
         List<RecursoEntity> source = idTipoRecurso != null ? recursoRepository.findRecursosDisponibles(idTipoRecurso) : recursoRepository.findRecursosDisponibles();
+        // Después, realizamos la transformación del listado de Entity a DTO utilizando su converter.
         List<RecursoDTO> recursos = source.stream().map(recurso -> recursoEntityConverter.convert(recurso)).toList();
         return recursos;
     }
-
     @Override
     public List<TipoRecursoDTO> listResourcesByIncidentClassification(Integer idClasificacionIncidente) {
+        // Se realiza una consulta a base de datos para obtener todos los tipos de recurso recomendados para una
+        // clasificación de incidente determinada.
         List<TipoRecursoEntity> source =  tipoRecursoRepository.listResourcesByIncidentClassification(idClasificacionIncidente);
+        // Después, realizamos la transformación del listado de Entity a DTO utilizando su converter.
         List<TipoRecursoDTO> target = source.stream().map(tipoRecurso -> tipoRecursoEntityConverter.convert(tipoRecurso)).toList();
         return target;
     }
