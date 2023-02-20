@@ -9,7 +9,6 @@ import com.allavona.tfg.business.utils.EncryptUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
 @Service
 public class UsuariosServiceImpl implements UsuariosService {
     private final UsuarioRepository repository;
