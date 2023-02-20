@@ -16,7 +16,7 @@ class UsuarioControllerTest {
     @DisplayName("Autenticar usuario")
     void autenticar() {
         UsuarioDTO usuario = UsuarioDTO.builder().build();
-        usuario.setUsername("71661919Z");
+        usuario.setUsername("medico");
         usuario.setPassword("arturo");
         usuario = usuariosService.autenticar(usuario);
         assertNotNull(usuario);
