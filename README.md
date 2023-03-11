@@ -1,12 +1,12 @@
 # tfg-sigase-api
 
-API Rest desarrollado como parte de mi Trabajo de Fin de Grado.
+**API Rest** desarrollado como parte de mi Trabajo de Fin de Grado en Ingeniería Informática por la **Universidad Internacional de La Rioja**.
 
 ## Descripción
 
-En el trabajo completo se desarrollará una aplicación front cuya finalidad es la gestión de activos en situaciones de emergencia.
+El trabajo comprende el desarrollo de un sistema compuesto por una aplicación front y un API cuya finalidad es la gestión de activos en situaciones de emergencia.
 
-En el MVP que se desea desarrollar, permitirá listar y crear incidentes.
+El MVP desarrollado permite listar y crear incidentes.
 
 ## Autor
 
@@ -20,8 +20,8 @@ Arturo Llavona Vallina - [LinkedIn](https://www.linkedin.com/in/arturo-llavona-v
 
 ## Historial de versiones
 
-* 0.0.1
-    * Release inicia
+* 1.0.2
+    * Release inicial
     
       
 
